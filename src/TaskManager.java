@@ -108,10 +108,10 @@ public class TaskManager {
         subTasks.remove(id);
         epicTasks.remove(id);
         for (EpicTask task:epicTasks.values()) {
-            ArrayList<Integer> subs = task.getSubIds();
-            if (subs.contains(id)){
-                subs.remove(Integer.valueOf(id));
-                task.setSubIds(subs);
+            ArrayList<Integer> subtasks = task.getSubIds();
+            if (subtasks.contains(id)){
+                subtasks.remove(Integer.valueOf(id));
+                task.setSubIds(subtasks);
                 epicStatusUpdater(task);
             }
 
