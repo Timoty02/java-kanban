@@ -2,13 +2,13 @@ public class Task {
     protected String name;
     protected String description;
     protected int id;
-    protected String status;
+    protected TaskStatus status;
 
     Task (String name, String description){
         this.name = name;
         this.description = description;
     }
-    Task (String name, String description, String status){
+    Task (String name, String description, TaskStatus status){
         this.name = name;
         this.description = description;
         this.status = status;
@@ -18,7 +18,7 @@ public class Task {
         this.id = id;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(TaskStatus status) {
         this.status = status;
     }
 
@@ -26,7 +26,7 @@ public class Task {
         return id;
     }
 
-    public String getStatus() {
+    public TaskStatus getStatus() {
         return status;
     }
 
