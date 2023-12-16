@@ -1,7 +1,11 @@
-public class SubTask extends Task{
+package Tasks;
+
+import Tasks.Task;
+
+public class SubTask extends Task {
     protected int epicId;
 
-    SubTask(String name, String description, TaskStatus status){
+    public SubTask(String name, String description, TaskStatus status){
         super(name, description, status);
 
     }
@@ -17,7 +21,7 @@ public class SubTask extends Task{
 
     @Override
     public String toString() {
-        return "SubTask{" +
+        return "Tasks.SubTask{" +
                 "epicId=" + epicId +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +

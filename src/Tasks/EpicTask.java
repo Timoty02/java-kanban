@@ -1,9 +1,13 @@
+package Tasks;
+
+import Tasks.Task;
+
 import java.util.ArrayList;
 
-public class EpicTask extends Task{
+public class EpicTask extends Task {
     protected ArrayList<Integer> subIds;
 
-    EpicTask(String name, String description){
+    public EpicTask(String name, String description){
         super(name, description);
 
     }
@@ -19,7 +23,7 @@ public class EpicTask extends Task{
 
     @Override
     public String toString() {
-        return "EpicTask{" +
+        return "Tasks.EpicTask{" +
                 "subIds=" + subIds +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
