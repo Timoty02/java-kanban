@@ -6,9 +6,7 @@ import Tasks.SubTask;
 import Tasks.Task;
 import Tasks.TaskStatus;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
     private int nextId = 1;
@@ -76,10 +74,12 @@ public class InMemoryTaskManager implements TaskManager {
 
 
     public void deleteTasks() {
+        historyManager.removeTasks(tasks);
         tasks.clear();
     }
 
     public void deleteSubTasks() {
+        historyManager.removeSubTasks(subTasks);
         subTasks.clear();
         for (EpicTask task:epicTasks.values()) {
 
@@ -89,13 +89,20 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public void deleteEpicTasks() {
+        historyManager.removeEpicTasks(epicTasks);
+        for (EpicTask task:epicTasks.values()) {
+            ArrayList<Integer> subtasks = new ArrayList<>(task.getSubIds());
+            for (int i:subtasks){
+                deleteById(i);
+            }
+        }
         epicTasks.clear();
     }
 
     public void deleteAllTasks() {
-        tasks.clear();
-        subTasks.clear();
-        epicTasks.clear();
+        deleteTasks();
+        deleteEpicTasks();
+        deleteSubTasks();
     }
 
     public Task getTaskByID(int id) {
@@ -119,6 +126,7 @@ public class InMemoryTaskManager implements TaskManager {
         tasks.remove(id);
         subTasks.remove(id);
         epicTasks.remove(id);
+        historyManager.remove(id);
         for (EpicTask task:epicTasks.values()) {
             ArrayList<Integer> subtasks = task.getSubIds();
             if (subtasks.contains(id)){

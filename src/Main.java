@@ -31,15 +31,32 @@ public class Main {
         System.out.println(epicTask.toString());
         //taskManager.deleteSubTasks();
         System.out.println(epicTask.toString());
-        for (int i = 0; i < 10; i++){
-            System.out.println(taskManager.getSubByID(1));
-        }
+
         System.out.println(taskManager.getEpicByID(3));
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
         System.out.println();
         for (Task task:taskManager.getHistory()){
             System.out.println(task);
         }
+        System.out.println(taskManager.getSubByID(2));
         System.out.println(taskManager.getSubByID(1));
+
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        for (Task task:taskManager.getHistory()){
+            System.out.println(task);
+        }
+        taskManager.deleteAllTasks();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
         System.out.println();
         for (Task task:taskManager.getHistory()){
             System.out.println(task);
