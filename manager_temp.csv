@@ -1,0 +1,6 @@
+id,type,name,status,description,epic
+1,EPIC,Большой переезд,IN_PROGRESS,Большой переезд в новый дом,0
+2,SUBTASK,Переезд,NEW,Переезд в новый дом,3
+3,SUBTASK,Переезд2,DONE,Переезд в новый дом2,3
+
+3,2,1

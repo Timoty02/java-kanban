@@ -10,6 +10,8 @@ public class EpicTask extends Task {
 
     }
 
+
+
     public void setSubIds(ArrayList<Integer> subIds) {
         this.subIds = subIds;
     }
@@ -21,12 +23,33 @@ public class EpicTask extends Task {
 
     @Override
     public String toString() {
-        return "Tasks.EpicTask{" +
-                "subIds=" + subIds +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", id=" + id +
-                ", status='" + status + '\'' +
-                '}';
+        String res = id + "," + TaskType.EPIC + "," + name + "," + status + "," + description + ",0";
+        return res;
     }
+
+    /*@Override
+    public Task fromString(String value){
+        String[] values = value.split(",");
+        EpicTask epicTask = new EpicTask(values[2], values[4]);
+        TaskStatus res1;
+        switch(values[3]){
+            case "NEW":
+                res1 = TaskStatus.NEW;
+                break;
+            case "DONE":
+                res1 = TaskStatus.DONE;
+                break;
+            case "IN_PROGRESS":
+                res1 = TaskStatus.IN_PROGRESS;
+                break;
+            default:
+                res1 = null;
+                break;
+        }
+
+
+        epicTask.setStatus(res1);
+        epicTask.setId(Integer.parseInt(values[0]));
+        return epicTask;
+    }*/
 }

@@ -130,7 +130,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         List<Task> historyTaskList = new ArrayList<>();
         Node<Task> nTask = tail;
         if (nTask == null && head == null){
-            System.out.println("История просмотров пуста");
+
         } else if (nTask == null){
             historyTaskList.add(head.getData());
         } else {

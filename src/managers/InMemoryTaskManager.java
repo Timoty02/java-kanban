@@ -36,7 +36,7 @@ public class InMemoryTaskManager implements TaskManager {
             for (int id : task.getSubIds()) {
                 SubTask subTask = subTasks.get(id);
                 subTask.setEpicId(task.getId());
-                update(subTask);// Не уверен, нужно ли здесь вызывать метод update
+                update(subTask);
             }
         }
         epicStatusUpdater(task);
@@ -60,15 +60,24 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public HashMap<Integer, Task> getTasks() {
+        for(Task task:tasks.values()){
+            historyManager.add(task);
+        }
         return tasks;
 
     }
 
     public HashMap<Integer, SubTask> getSubTasks() {
+        for(SubTask task:subTasks.values()){
+            historyManager.add(task);
+        }
         return subTasks;
     }
 
     public HashMap<Integer, EpicTask> getEpicTasks() {
+        for(EpicTask task:epicTasks.values()){
+            historyManager.add(task);
+        }
         return epicTasks;
     }
 
@@ -103,6 +112,16 @@ public class InMemoryTaskManager implements TaskManager {
         deleteTasks();
         deleteEpicTasks();
         deleteSubTasks();
+    }
+    public Task getByID(int id) {
+        if (tasks.containsKey(id)){
+            return getTaskByID(id);
+        } else if (epicTasks.containsKey(id)) {
+            return getEpicByID(id);
+        } else if (subTasks.containsKey(id)){
+            return  getSubByID(id);
+        } else return null;
+
     }
 
     public Task getTaskByID(int id) {

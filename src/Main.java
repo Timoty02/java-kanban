@@ -6,10 +6,17 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) {
-        //тестирование
+        //тестирование было решено оставить в этом методе
         System.out.println("Поехали!");
-        TaskManager taskManager = Managers.getDefault();
-        SubTask subTask = new SubTask("Переезд", "Переезд в новый дом", TaskStatus.NEW);
+        TaskManager taskManager = FileBackedTasksManager.loadFromFile();
+        System.out.println("История");
+        if(taskManager.getHistory()!=null){
+            for (Task task:taskManager.getHistory()){
+                System.out.println(task);
+            }
+        }
+
+        /*SubTask subTask = new SubTask("Переезд", "Переезд в новый дом", TaskStatus.NEW);
         taskManager.create(subTask);
         subTask = new SubTask("Переезд2", "Переезд в новый дом2", TaskStatus.NEW);
         subTask = taskManager.create(subTask);
@@ -37,7 +44,7 @@ public class Main {
         System.out.println();
         System.out.println();
         System.out.println();
-        System.out.println();
+        System.out.println("История");
         for (Task task:taskManager.getHistory()){
             System.out.println(task);
         }
@@ -48,19 +55,19 @@ public class Main {
         System.out.println();
         System.out.println();
         System.out.println();
-        System.out.println();
+        System.out.println("История");
         for (Task task:taskManager.getHistory()){
             System.out.println(task);
         }
-        taskManager.deleteAllTasks();
+        //taskManager.deleteAllTasks();
         System.out.println();
         System.out.println();
         System.out.println();
         System.out.println();
-        System.out.println();
+        System.out.println("История");
         for (Task task:taskManager.getHistory()){
             System.out.println(task);
-        }
+        }*/
 
 
     }
