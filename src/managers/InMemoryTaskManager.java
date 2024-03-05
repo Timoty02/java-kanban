@@ -6,6 +6,8 @@ import tasks.SubTask;
 import tasks.Task;
 import tasks.TaskStatus;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -13,6 +15,17 @@ public class InMemoryTaskManager implements TaskManager {
     HashMap<Integer, Task> tasks = new HashMap<>();
     HashMap<Integer, EpicTask> epicTasks = new HashMap<>();
     HashMap<Integer, SubTask> subTasks = new HashMap<>();
+
+    TreeSet<Task> sortedTasks = new TreeSet<>(
+            (Task task1, Task task2) -> {
+                if (task1.getStartTime() == null) {
+                    return 1;
+                }
+                if (task2.getStartTime() == null) {
+                    return -1;
+                }
+                return (int) Duration.between(task1.getStartTime(), task2.getStartTime()).toMinutes();
+            });
 
     public Task create(Task task) {
         task.setId(nextId);
@@ -39,7 +52,7 @@ public class InMemoryTaskManager implements TaskManager {
                 update(subTask);
             }
         }
-        epicStatusUpdater(task);
+        epicUpdater(task);
         return task;
 
     }
@@ -49,8 +62,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public void update(SubTask task) {
-        EpicTask epicTask = epicTasks.get( task.getEpicId());
-        epicStatusUpdater(epicTask);
+        EpicTask epicTask = epicTasks.get(task.getEpicId());
+        epicUpdater(epicTask);
         subTasks.put(task.getId(), task);
     }
 
@@ -60,7 +73,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public HashMap<Integer, Task> getTasks() {
-        for(Task task:tasks.values()){
+        for (Task task : tasks.values()) {
             historyManager.add(task);
         }
         return tasks;
@@ -68,14 +81,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public HashMap<Integer, SubTask> getSubTasks() {
-        for(SubTask task:subTasks.values()){
+        for (SubTask task : subTasks.values()) {
             historyManager.add(task);
         }
         return subTasks;
     }
 
     public HashMap<Integer, EpicTask> getEpicTasks() {
-        for(EpicTask task:epicTasks.values()){
+        for (EpicTask task : epicTasks.values()) {
             historyManager.add(task);
         }
         return epicTasks;
@@ -90,18 +103,18 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteSubTasks() {
         historyManager.removeSubTasks(subTasks);
         subTasks.clear();
-        for (EpicTask task:epicTasks.values()) {
+        for (EpicTask task : epicTasks.values()) {
 
             task.setSubIds(null);
-            epicStatusUpdater(task);
+            epicUpdater(task);
         }
     }
 
     public void deleteEpicTasks() {
         historyManager.removeEpicTasks(epicTasks);
-        for (EpicTask task:epicTasks.values()) {
+        for (EpicTask task : epicTasks.values()) {
             ArrayList<Integer> subtasks = new ArrayList<>(task.getSubIds());
-            for (int i:subtasks){
+            for (int i : subtasks) {
                 deleteById(i);
             }
         }
@@ -113,13 +126,14 @@ public class InMemoryTaskManager implements TaskManager {
         deleteEpicTasks();
         deleteSubTasks();
     }
+
     public Task getByID(int id) {
-        if (tasks.containsKey(id)){
+        if (tasks.containsKey(id)) {
             return getTaskByID(id);
         } else if (epicTasks.containsKey(id)) {
             return getEpicByID(id);
-        } else if (subTasks.containsKey(id)){
-            return  getSubByID(id);
+        } else if (subTasks.containsKey(id)) {
+            return getSubByID(id);
         } else return null;
 
     }
@@ -146,12 +160,12 @@ public class InMemoryTaskManager implements TaskManager {
         subTasks.remove(id);
         epicTasks.remove(id);
         historyManager.remove(id);
-        for (EpicTask task:epicTasks.values()) {
+        for (EpicTask task : epicTasks.values()) {
             ArrayList<Integer> subtasks = task.getSubIds();
-            if (subtasks.contains(id)){
+            if (subtasks.contains(id)) {
                 subtasks.remove(Integer.valueOf(id));
                 task.setSubIds(subtasks);
-                epicStatusUpdater(task);
+                epicUpdater(task);
             }
 
         }
@@ -169,13 +183,21 @@ public class InMemoryTaskManager implements TaskManager {
 
     }
 
-    public void epicStatusUpdater(EpicTask task){
+    public void epicUpdater(EpicTask task) {
         TaskStatus status = TaskStatus.IN_PROGRESS;
         int newSubs = 0;
         int doneSubs = 0;
+        LocalDateTime tempStartTime = LocalDateTime.of(0, 1, 1, 0, 0, 0);
+        LocalDateTime tempEndTime = LocalDateTime.of(0, 1, 1, 0, 0, 0);
         if (task.getSubIds() != null) {
             for (int id : task.getSubIds()) {
                 SubTask subTask = subTasks.get(id);
+                if (subTask.getStartTime().isAfter(tempStartTime)) {
+                    tempStartTime = subTask.getStartTime();
+                }
+                if (subTask.getEndTime().isAfter(tempEndTime)) {
+                    tempEndTime = subTask.getEndTime();
+                }
                 if (TaskStatus.NEW.equals(subTask.getStatus())) {
                     newSubs++;
                 } else if (TaskStatus.DONE.equals(subTask.getStatus())) {
@@ -184,22 +206,23 @@ public class InMemoryTaskManager implements TaskManager {
                     break;
                 }
             }
-            if (newSubs == task.getSubIds().size()){
+            if (newSubs == task.getSubIds().size()) {
                 status = TaskStatus.NEW;
-            } else if (doneSubs == task.getSubIds().size()){
+            } else if (doneSubs == task.getSubIds().size()) {
                 status = TaskStatus.DONE;
             }
 
         } else {
             status = TaskStatus.NEW;
         }
-
-
+        task.setStartTime(tempStartTime);
+        task.setEndTime(tempEndTime);
+        task.setDuration((int) Duration.between(tempEndTime, tempStartTime).toMinutes());
         task.setStatus(status);
         update(task);
     }
 
-    public List<Task> getHistory(){
+    public List<Task> getHistory() {
         return historyManager.getHistory();
     }
 }

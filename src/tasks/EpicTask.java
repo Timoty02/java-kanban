@@ -1,8 +1,10 @@
 package tasks;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class EpicTask extends Task {
+    protected LocalDateTime endTime;
     protected ArrayList<Integer> subIds;
 
     public EpicTask(String name, String description){
@@ -10,6 +12,10 @@ public class EpicTask extends Task {
 
     }
 
+    public EpicTask(String name, String description, LocalDateTime endTime) {
+        super(name, description);
+        this.endTime = endTime;
+    }
 
 
     public void setSubIds(ArrayList<Integer> subIds) {
@@ -27,29 +33,14 @@ public class EpicTask extends Task {
         return res;
     }
 
-    /*@Override
-    public Task fromString(String value){
-        String[] values = value.split(",");
-        EpicTask epicTask = new EpicTask(values[2], values[4]);
-        TaskStatus res1;
-        switch(values[3]){
-            case "NEW":
-                res1 = TaskStatus.NEW;
-                break;
-            case "DONE":
-                res1 = TaskStatus.DONE;
-                break;
-            case "IN_PROGRESS":
-                res1 = TaskStatus.IN_PROGRESS;
-                break;
-            default:
-                res1 = null;
-                break;
-        }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
 
 
-        epicTask.setStatus(res1);
-        epicTask.setId(Integer.parseInt(values[0]));
-        return epicTask;
-    }*/
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
 }

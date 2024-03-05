@@ -1,10 +1,16 @@
 package tasks;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Task {
     protected String name;
     protected String description;
     protected int id;
+
+    protected int duration;
     protected TaskStatus status;
+    protected LocalDateTime startTime;
 
     public Task(String name, String description){
         this.name = name;
@@ -35,7 +41,9 @@ public class Task {
 
     @Override
     public String toString() {
-        String res = id + "," + TaskType.TASK + "," + name + "," + status + "," + description + ",0";
+        String res = id + "," + TaskType.TASK + "," + name + "," + status + "," + description + ",0"
+            + startTime.format(DateTimeFormatter.ISO_DATE_TIME) + ","
+            + getEndTime().format(DateTimeFormatter.ISO_DATE_TIME) + "," + duration;
         return res;
     }
 
@@ -47,7 +55,7 @@ public class Task {
                 task = new Task(values[2], values[4]);
                 break;
             case "EPIC":
-                task = new EpicTask(values[2], values[4]);
+                task = new EpicTask(values[2], values[4], LocalDateTime.parse(values[7], DateTimeFormatter.ISO_DATE_TIME));
                 break;
             case "SUBTASK":
                 task = new SubTask(values[2], values[4]);
@@ -77,6 +85,24 @@ public class Task {
         assert task != null;
         task.setStatus(res1);
         task.setId(Integer.parseInt(values[0]));
+        task.setStartTime(LocalDateTime.parse(values[6], DateTimeFormatter.ISO_DATE_TIME));
+        task.setDuration(Integer.parseInt(values[8]));
         return task;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime.plusMinutes(duration);
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
     }
 }

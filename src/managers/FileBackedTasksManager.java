@@ -132,8 +132,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
     }
 
     @Override
-    public void epicStatusUpdater(EpicTask task){
-        super.epicStatusUpdater(task);
+    public void epicUpdater(EpicTask task){
+        super.epicUpdater(task);
         save();
     }
 
@@ -185,7 +185,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
     private void save(){
         try{
             try(Writer fileWriter = new FileWriter("manager.csv")){
-                fileWriter.write("id,type,name,status,description,epic\n");
+                fileWriter.write("id,type,name,status,description,epic,startTime,endTime,duration\n");
                 List<String> temp = new ArrayList<>();
                 if (!tasks.isEmpty()){
                     for(Task task:tasks.values()){
