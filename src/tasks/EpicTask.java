@@ -7,7 +7,7 @@ public class EpicTask extends Task {
     protected LocalDateTime endTime;
     protected ArrayList<Integer> subIds;
 
-    public EpicTask(String name, String description){
+    public EpicTask(String name, String description) {
         super(name, description);
 
     }
@@ -29,10 +29,9 @@ public class EpicTask extends Task {
 
     @Override
     public String toString() {
-        String res = id + "," + TaskType.EPIC + "," + name + "," + status + "," + description + ",0,"
-            + startTime.format(Format) + ","
-            + getEndTime().format(Format) + "," + duration;
-        return res;
+        return id + "," + TaskType.EPIC + "," + name + "," + status + "," + description + ",0,"
+                + startTime.format(Format) + ","
+                + getEndTime().format(Format) + "," + duration;
     }
 
 

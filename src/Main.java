@@ -34,6 +34,7 @@ public class Main {
         ids.add(2);
         epicTask.setSubIds(ids);
         System.out.println(taskManager.create(epicTask).toString());
+        System.out.println(taskManager.getSortedTasks());
         /*System.out.println(subTask.toString());
 
         System.out.println(subTask.getEpicId());

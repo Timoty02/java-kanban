@@ -8,6 +8,7 @@ import tasks.Task;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeSet;
 
 public interface TaskManager {
 
@@ -57,9 +58,8 @@ public interface TaskManager {
 
     void epicUpdater(EpicTask task);
 
-     List<Task> getHistory();
+    List<Task> getHistory();
 
 
-
-
+    TreeSet<Task> getSortedTasks();
 }

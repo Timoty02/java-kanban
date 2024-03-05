@@ -12,9 +12,8 @@ import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
     private int nextId = 1;
-    HashMap<Integer, Task> tasks = new HashMap<>();
-    HashMap<Integer, EpicTask> epicTasks = new HashMap<>();
-    HashMap<Integer, SubTask> subTasks = new HashMap<>();
+
+
 
     TreeSet<Task> sortedTasks = new TreeSet<>(
             (Task task1, Task task2) -> {
@@ -24,13 +23,14 @@ public class InMemoryTaskManager implements TaskManager {
                 if (task2.getStartTime() == null) {
                     return -1;
                 }
-                return (int) Duration.between(task1.getStartTime(), task2.getStartTime()).toMinutes();
+                return (int) Duration.between(task2.getStartTime(), task1.getStartTime()).toMinutes();
             });
 
     public Task create(Task task) {
         task.setId(nextId);
         nextId++;
         tasks.put(task.getId(), task);
+        sortedTasks.add(task);
         return task;
     }
 
@@ -38,6 +38,7 @@ public class InMemoryTaskManager implements TaskManager {
         task.setId(nextId);
         nextId++;
         subTasks.put(task.getId(), task);
+        sortedTasks.add(task);
         return task;
     }
 
@@ -222,5 +223,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     public List<Task> getHistory() {
         return historyManager.getHistory();
+    }
+
+    public TreeSet<Task> getSortedTasks() {
+        return sortedTasks;
     }
 }

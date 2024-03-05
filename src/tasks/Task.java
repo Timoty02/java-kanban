@@ -14,11 +14,12 @@ public class Task {
     protected TaskStatus status;
     protected LocalDateTime startTime;
 
-    public Task(String name, String description){
+    public Task(String name, String description) {
         this.name = name;
         this.description = description;
     }
-    public Task (String name, String description, TaskStatus status){
+
+    public Task(String name, String description, TaskStatus status) {
         this.name = name;
         this.description = description;
         this.status = status;
@@ -43,16 +44,15 @@ public class Task {
 
     @Override
     public String toString() {
-        String res = id + "," + TaskType.TASK + "," + name + "," + status + "," + description + ",0,"
-            + startTime.format(Format) + ","
-            + getEndTime().format(Format) + "," + duration;
-        return res;
+        return id + "," + TaskType.TASK + "," + name + "," + status + "," + description + ",0,"
+                + startTime.format(Format) + ","
+                + getEndTime().format(Format) + "," + duration;
     }
 
-    public static Task fromString(String value){
+    public static Task fromString(String value) {
         String[] values = value.split(",");
         Task task;
-        switch(values[1]){
+        switch (values[1]) {
             case "TASK":
                 task = new Task(values[2], values[4]);
                 break;
@@ -69,7 +69,7 @@ public class Task {
 
         }
         TaskStatus res1;
-        switch(values[3]){
+        switch (values[3]) {
             case "NEW":
                 res1 = TaskStatus.NEW;
                 break;

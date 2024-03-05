@@ -1,6 +1,6 @@
 package managers;
 
-public class Node <T>{
+public class Node<T> {
     protected T data;
     protected Node next;
     protected Node prev;
