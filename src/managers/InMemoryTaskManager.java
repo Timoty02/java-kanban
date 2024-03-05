@@ -187,12 +187,12 @@ public class InMemoryTaskManager implements TaskManager {
         TaskStatus status = TaskStatus.IN_PROGRESS;
         int newSubs = 0;
         int doneSubs = 0;
-        LocalDateTime tempStartTime = LocalDateTime.of(0, 1, 1, 0, 0, 0);
-        LocalDateTime tempEndTime = LocalDateTime.of(0, 1, 1, 0, 0, 0);
+        LocalDateTime tempStartTime = LocalDateTime.MAX;
+        LocalDateTime tempEndTime = LocalDateTime.MIN;
         if (task.getSubIds() != null) {
             for (int id : task.getSubIds()) {
                 SubTask subTask = subTasks.get(id);
-                if (subTask.getStartTime().isAfter(tempStartTime)) {
+                if (subTask.getStartTime().isBefore(tempStartTime)) {
                     tempStartTime = subTask.getStartTime();
                 }
                 if (subTask.getEndTime().isAfter(tempEndTime)) {
@@ -202,8 +202,6 @@ public class InMemoryTaskManager implements TaskManager {
                     newSubs++;
                 } else if (TaskStatus.DONE.equals(subTask.getStatus())) {
                     doneSubs++;
-                } else {
-                    break;
                 }
             }
             if (newSubs == task.getSubIds().size()) {
@@ -217,7 +215,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         task.setStartTime(tempStartTime);
         task.setEndTime(tempEndTime);
-        task.setDuration((int) Duration.between(tempEndTime, tempStartTime).toMinutes());
+        task.setDuration((int) Duration.between(tempStartTime, tempEndTime).toMinutes());
         task.setStatus(status);
         update(task);
     }

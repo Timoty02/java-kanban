@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Task {
+
+    protected static final DateTimeFormatter Format = DateTimeFormatter.ofPattern("yyyy.MM.dd-HH.mm.ss");
     protected String name;
     protected String description;
     protected int id;
@@ -41,9 +43,9 @@ public class Task {
 
     @Override
     public String toString() {
-        String res = id + "," + TaskType.TASK + "," + name + "," + status + "," + description + ",0"
-            + startTime.format(DateTimeFormatter.ISO_DATE_TIME) + ","
-            + getEndTime().format(DateTimeFormatter.ISO_DATE_TIME) + "," + duration;
+        String res = id + "," + TaskType.TASK + "," + name + "," + status + "," + description + ",0,"
+            + startTime.format(Format) + ","
+            + getEndTime().format(Format) + "," + duration;
         return res;
     }
 
@@ -55,7 +57,7 @@ public class Task {
                 task = new Task(values[2], values[4]);
                 break;
             case "EPIC":
-                task = new EpicTask(values[2], values[4], LocalDateTime.parse(values[7], DateTimeFormatter.ISO_DATE_TIME));
+                task = new EpicTask(values[2], values[4], LocalDateTime.parse(values[7], Format));
                 break;
             case "SUBTASK":
                 task = new SubTask(values[2], values[4]);
@@ -85,7 +87,7 @@ public class Task {
         assert task != null;
         task.setStatus(res1);
         task.setId(Integer.parseInt(values[0]));
-        task.setStartTime(LocalDateTime.parse(values[6], DateTimeFormatter.ISO_DATE_TIME));
+        task.setStartTime(LocalDateTime.parse(values[6], Format));
         task.setDuration(Integer.parseInt(values[8]));
         return task;
     }

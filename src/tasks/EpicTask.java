@@ -29,7 +29,9 @@ public class EpicTask extends Task {
 
     @Override
     public String toString() {
-        String res = id + "," + TaskType.EPIC + "," + name + "," + status + "," + description + ",0";
+        String res = id + "," + TaskType.EPIC + "," + name + "," + status + "," + description + ",0,"
+            + startTime.format(Format) + ","
+            + getEndTime().format(Format) + "," + duration;
         return res;
     }
 
