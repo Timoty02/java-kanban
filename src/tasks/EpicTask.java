@@ -22,6 +22,11 @@ public class EpicTask extends Task {
 
     }
 
+    public EpicTask(String name, String description, int id, int duration, TaskStatus status, LocalDateTime startTime, LocalDateTime endTime, ArrayList<Integer> subIds) {
+        super(name, description, id, duration, status, startTime, endTime);
+        this.subIds = subIds;
+    }
+
 
     public void setSubIds(ArrayList<Integer> subIds) {
         this.subIds = subIds;
@@ -42,5 +47,14 @@ public class EpicTask extends Task {
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
+    }
+
+    public static EpicTask copyOf(EpicTask task){
+        if (task!=null){
+            return new EpicTask(task.getName(),task.getDescription(), task.getId(),task.getDuration(), task.getStatus(),
+                    task.getStartTime(),task.getEndTime(),task.getSubIds());
+        } else {
+            return null;
+        }
     }
 }

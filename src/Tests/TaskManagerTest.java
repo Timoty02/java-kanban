@@ -182,12 +182,12 @@ abstract class TaskManagerTest<T extends TaskManager> {
     void epicUpdater() {
         taskManager.create(subTask1);
         taskManager.create(epicTask1);
-
         taskManager.update(subTask1);
         assertEquals(TaskStatus.NEW, taskManager.getEpicByID(epicTask1.getId()).getStatus());
         subTask1.setStatus(TaskStatus.DONE);
         taskManager.update(subTask1);
         assertEquals(TaskStatus.DONE, taskManager.getEpicByID(epicTask1.getId()).getStatus());
+
     }
 
     @Test

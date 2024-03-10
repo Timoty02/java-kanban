@@ -55,6 +55,16 @@ public class Task {
         this.endTime = endTime;
     }
 
+    public Task(String name, String description, int id, int duration, TaskStatus status, LocalDateTime startTime, LocalDateTime endTime) {
+        this.name = name;
+        this.description = description;
+        this.id = id;
+        this.duration = duration;
+        this.status = status;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -154,5 +164,26 @@ public class Task {
     @Override
     public int hashCode() {
         return Objects.hash(name, description, duration, status, startTime, endTime);
+    }
+
+    public static Task copyOf(Task task){
+        if (task!=null){
+            return new Task(task.getName(),task.getDescription(), task.getId(),task.getDuration(), task.getStatus(),
+                task.getStartTime(),task.getEndTime());
+        } else {
+            return null;
+        }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 }

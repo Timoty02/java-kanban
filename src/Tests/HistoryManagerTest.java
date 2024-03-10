@@ -13,7 +13,10 @@ import tasks.TaskStatus;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class HistoryManagerTest {
@@ -52,6 +55,57 @@ public class HistoryManagerTest {
         historyManager.add(subTask1);
         historyManager.add(epicTask1);
         historyManager.add(task1);
-        assertEquals(historyManager.getHistory().get(0), task1);
+        assertEquals(task1, historyManager.getHistory().get(0));
     }
+
+    @Test
+    void remove(){
+        historyManager.add(task1);
+        historyManager.remove(1);
+        assertTrue(historyManager.getHistory().isEmpty());
+        historyManager.add(subTask1);
+        historyManager.remove(2);
+        assertTrue(historyManager.getHistory().isEmpty());
+        historyManager.add(epicTask1);
+        historyManager.remove(3);
+        assertTrue(historyManager.getHistory().isEmpty());
+        historyManager.add(task1);
+        historyManager.add(epicTask1);
+        historyManager.remove(1);
+        assertEquals(1, historyManager.getHistory().size());
+        historyManager.add(task1);
+        historyManager.add(subTask1);
+        historyManager.add(epicTask1);
+        historyManager.remove(2);
+        ArrayList<Task> temp = new ArrayList<>(List.of(epicTask1, task1));
+        assertEquals(temp, historyManager.getHistory());
+        historyManager.add(task1);
+        historyManager.add(subTask1);
+        historyManager.add(epicTask1);
+        historyManager.remove(1);
+        ArrayList<Task> temp1 = new ArrayList<>(List.of(epicTask1, subTask1));
+        assertEquals(temp1, historyManager.getHistory());
+    }
+
+    @Test
+    void removeEmpty(){
+        assertNull(historyManager.remove(1));
+    }
+
+    @Test
+    void removeAll(){
+        historyManager.add(task1);
+        historyManager.add(subTask1);
+        historyManager.add(epicTask1);
+        HashMap<Integer, Task> hashMap1 = new HashMap<>(Map.of(1,task1));
+        historyManager.removeTasks(hashMap1);
+        assertEquals(2, historyManager.getHistory().size());
+        HashMap<Integer, EpicTask> hashMap2 = new HashMap<>(Map.of(1,epicTask1));
+        historyManager.removeEpicTasks(hashMap2);
+        assertEquals(1, historyManager.getHistory().size());
+        HashMap<Integer, SubTask> hashMap3 = new HashMap<>(Map.of(1,subTask1));
+        historyManager.removeSubTasks(hashMap3);
+        assertEquals(0, historyManager.getHistory().size());
+    }
+
 }

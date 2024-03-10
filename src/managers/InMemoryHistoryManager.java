@@ -24,23 +24,9 @@ public class InMemoryHistoryManager implements HistoryManager {
         taskHistory.put(task.getId(), linkLast(task));
     }
 
-    public void remove(int id) {
+    public Task remove(int id) {
         Task task = removeNode(taskHistory.remove(id));
-        /*try {
-            EpicTask epicTask = (EpicTask) task;
-        } catch (ClassCastException e){
-            return;
-        }
-
-            EpicTask epicTask = (EpicTask) task;
-            assert epicTask != null;
-            if (!epicTask.getSubIds().isEmpty()){
-                for (int j:epicTask.getSubIds()) {
-                    remove(j);
-                }
-            }*/
-
-
+        return task;
     }
 
     public void removeTasks(Map<Integer, Task> tasks) {
@@ -79,7 +65,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         return getTasks();
     }
 
-    public Node linkLast(Task task) {
+    private Node linkLast(Task task) {
         Node<Task> newNode = new Node<Task>(task, null, tail);
         size++;
         if (head == null) {
@@ -122,7 +108,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
-    public List<Task> getTasks() {
+    private List<Task> getTasks() {
         List<Task> historyTaskList = new ArrayList<>();
         Node<Task> nTask = tail;
         if (nTask == null && head == null) {

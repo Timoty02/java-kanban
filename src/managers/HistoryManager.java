@@ -10,7 +10,7 @@ import java.util.Map;
 public interface HistoryManager {
     void add(Task task);
 
-    void remove(int id);
+    Task remove(int id);
 
     List<Task> getHistory();
 
