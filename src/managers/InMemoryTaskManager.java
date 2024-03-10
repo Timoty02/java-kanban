@@ -1,6 +1,7 @@
 package managers;
 
 
+import exceptions.TaskCrossException;
 import tasks.EpicTask;
 import tasks.SubTask;
 import tasks.Task;
@@ -12,6 +13,7 @@ import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
     private int nextId = 1;
+    HistoryManager historyManager;
 
 
 
@@ -26,19 +28,33 @@ public class InMemoryTaskManager implements TaskManager {
                 return (int) Duration.between(task2.getStartTime(), task1.getStartTime()).toMinutes();
             });
 
+    public InMemoryTaskManager() {
+        historyManager = Managers.getDefaultHistory();
+    }
+
     public Task create(Task task) {
+        try{
+            addToSorted(task);
+        } catch (TaskCrossException e){
+            System.out.println(e.getMessage());
+            return task;
+        }
         task.setId(nextId);
         nextId++;
         tasks.put(task.getId(), task);
-        sortedTasks.add(task);
         return task;
     }
 
     public SubTask create(SubTask task) {
+        try{
+            addToSorted(task);
+        } catch (TaskCrossException e){
+            System.out.println(e.getMessage());
+            return task;
+        }
         task.setId(nextId);
         nextId++;
         subTasks.put(task.getId(), task);
-        sortedTasks.add(task);
         return task;
     }
 
@@ -114,10 +130,13 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteEpicTasks() {
         historyManager.removeEpicTasks(epicTasks);
         for (EpicTask task : epicTasks.values()) {
-            ArrayList<Integer> subtasks = new ArrayList<>(task.getSubIds());
-            for (int i : subtasks) {
-                deleteById(i);
+            if (!task.getSubIds().isEmpty()){
+                ArrayList<Integer> subtasks = new ArrayList<>(task.getSubIds());
+                for (int i : subtasks) {
+                    deleteById(i);
+                }
             }
+
         }
         epicTasks.clear();
     }
@@ -227,5 +246,16 @@ public class InMemoryTaskManager implements TaskManager {
 
     public TreeSet<Task> getSortedTasks() {
         return sortedTasks;
+    }
+
+    protected boolean addToSorted(Task task){
+        for (Task existingTask : sortedTasks) {
+            if (task.getStartTime().isBefore(existingTask.getEndTime()) &&
+                    task.getEndTime().isAfter(existingTask.getStartTime())) {
+                throw new TaskCrossException("Ошибка! На это время уже есть задача");
+            }
+        }
+
+        return sortedTasks.add(task);
     }
 }

@@ -12,7 +12,7 @@ import java.util.TreeSet;
 
 public interface TaskManager {
 
-    HistoryManager historyManager = Managers.getDefaultHistory();
+
 
     HashMap<Integer, Task> tasks = new HashMap<>();
     HashMap<Integer, EpicTask> epicTasks = new HashMap<>();

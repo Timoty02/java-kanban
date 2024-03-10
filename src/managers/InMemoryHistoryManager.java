@@ -13,8 +13,8 @@ import java.util.List;
 public class InMemoryHistoryManager implements HistoryManager {
     Map<Integer, Node> taskHistory = new HashMap<>();
 
-    public Node<Task> head;
-    public Node<Task> tail;
+    public Node<Task> head = null;
+    public Node<Task> tail = null;
     private int size = 0;
 
     public void add(Task task) {
@@ -46,7 +46,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void removeTasks(Map<Integer, Task> tasks) {
         if (tasks.isEmpty()) {
         } else {
-            for (int i = 0; i <= tasks.size(); i++) {
+            for (Integer i:tasks.keySet()) {
                 remove(tasks.get(i).getId());
             }
         }
@@ -55,7 +55,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void removeEpicTasks(Map<Integer, EpicTask> tasks) {
         if (tasks.isEmpty()) {
         } else {
-            for (int i : tasks.keySet()) {
+            for (Integer i:tasks.keySet()) {
                 remove(tasks.get(i).getId());
                 /*if (!tasks.get(i).getSubIds().isEmpty()){
                     for (int j:tasks.get(i).getSubIds()) {
@@ -69,7 +69,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void removeSubTasks(Map<Integer, SubTask> tasks) {
         if (tasks.isEmpty()) {
         } else {
-            for (int i = 0; i <= tasks.size(); i++) {
+            for (Integer i:tasks.keySet()) {
                 remove(tasks.get(i).getId());
             }
         }
