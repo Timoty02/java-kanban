@@ -11,7 +11,7 @@ import java.util.List;
 
 
 public class InMemoryHistoryManager implements HistoryManager {
-    Map<Integer, Node> taskHistory = new HashMap<>();
+    Map<Integer, Node<Task>> taskHistory = new HashMap<>();
 
     public Node<Task> head = null;
     public Node<Task> tail = null;
@@ -30,9 +30,8 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     public void removeTasks(Map<Integer, Task> tasks) {
-        if (tasks.isEmpty()) {
-        } else {
-            for (Integer i:tasks.keySet()) {
+        if (!tasks.isEmpty()) {
+            for (Integer i : tasks.keySet()) {
                 remove(tasks.get(i).getId());
             }
         }
@@ -41,7 +40,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void removeEpicTasks(Map<Integer, EpicTask> tasks) {
         if (tasks.isEmpty()) {
         } else {
-            for (Integer i:tasks.keySet()) {
+            for (Integer i : tasks.keySet()) {
                 remove(tasks.get(i).getId());
                 /*if (!tasks.get(i).getSubIds().isEmpty()){
                     for (int j:tasks.get(i).getSubIds()) {
@@ -55,7 +54,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void removeSubTasks(Map<Integer, SubTask> tasks) {
         if (tasks.isEmpty()) {
         } else {
-            for (Integer i:tasks.keySet()) {
+            for (Integer i : tasks.keySet()) {
                 remove(tasks.get(i).getId());
             }
         }
@@ -65,7 +64,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         return getTasks();
     }
 
-    private Node linkLast(Task task) {
+    private Node<Task> linkLast(Task task) {
         Node<Task> newNode = new Node<Task>(task, null, tail);
         size++;
         if (head == null) {

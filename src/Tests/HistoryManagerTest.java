@@ -1,8 +1,6 @@
 package Tests;
 
-import managers.FileBackedTasksManager;
 import managers.HistoryManager;
-import managers.InMemoryTaskManager;
 import managers.Managers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,8 +22,9 @@ public class HistoryManagerTest {
     Task task1;
     SubTask subTask1;
     EpicTask epicTask1;
+
     @BeforeEach
-    void setUp(){
+    void setUp() {
         historyManager = Managers.getDefaultHistory();
         task1 = new Task("Task 1", "Description 1", TaskStatus.NEW, LocalDateTime.of(2023, 1, 1, 10, 0),
                 LocalDateTime.of(2023, 1, 1, 11, 0), 60);
@@ -40,7 +39,7 @@ public class HistoryManagerTest {
     }
 
     @Test
-    void add(){
+    void add() {
         historyManager.add(task1);
         historyManager.add(subTask1);
         historyManager.add(epicTask1);
@@ -50,7 +49,7 @@ public class HistoryManagerTest {
     }
 
     @Test
-    void addDuble(){
+    void addDuble() {
         historyManager.add(task1);
         historyManager.add(subTask1);
         historyManager.add(epicTask1);
@@ -59,7 +58,7 @@ public class HistoryManagerTest {
     }
 
     @Test
-    void remove(){
+    void remove() {
         historyManager.add(task1);
         historyManager.remove(1);
         assertTrue(historyManager.getHistory().isEmpty());
@@ -88,22 +87,22 @@ public class HistoryManagerTest {
     }
 
     @Test
-    void removeEmpty(){
+    void removeEmpty() {
         assertNull(historyManager.remove(1));
     }
 
     @Test
-    void removeAll(){
+    void removeAll() {
         historyManager.add(task1);
         historyManager.add(subTask1);
         historyManager.add(epicTask1);
-        HashMap<Integer, Task> hashMap1 = new HashMap<>(Map.of(1,task1));
+        HashMap<Integer, Task> hashMap1 = new HashMap<>(Map.of(1, task1));
         historyManager.removeTasks(hashMap1);
         assertEquals(2, historyManager.getHistory().size());
-        HashMap<Integer, EpicTask> hashMap2 = new HashMap<>(Map.of(1,epicTask1));
+        HashMap<Integer, EpicTask> hashMap2 = new HashMap<>(Map.of(1, epicTask1));
         historyManager.removeEpicTasks(hashMap2);
         assertEquals(1, historyManager.getHistory().size());
-        HashMap<Integer, SubTask> hashMap3 = new HashMap<>(Map.of(1,subTask1));
+        HashMap<Integer, SubTask> hashMap3 = new HashMap<>(Map.of(1, subTask1));
         historyManager.removeSubTasks(hashMap3);
         assertEquals(0, historyManager.getHistory().size());
     }

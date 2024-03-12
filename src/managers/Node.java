@@ -2,8 +2,8 @@ package managers;
 
 public class Node<T> {
     protected T data;
-    protected Node next;
-    protected Node prev;
+    protected Node<T> next;
+    protected Node<T> prev;
 
     public Node() {
         next = null;
@@ -11,25 +11,25 @@ public class Node<T> {
         data = null;
     }
 
-    public Node(T d, Node n, Node p) {
+    public Node(T d, Node<T> n, Node<T> p) {
         data = d;
         next = n;
         prev = p;
     }
 
-    public void setLinkNext(Node n) {
+    public void setLinkNext(Node<T> n) {
         next = n;
     }
 
-    public void setLinkPrev(Node p) {
+    public void setLinkPrev(Node<T> p) {
         prev = p;
     }
 
-    public Node getLinkNext() {
+    public Node<T> getLinkNext() {
         return next;
     }
 
-    public Node getLinkPrev() {
+    public Node<T> getLinkPrev() {
         return prev;
     }
 

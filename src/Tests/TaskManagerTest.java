@@ -1,20 +1,14 @@
 package Tests;
 
-import managers.InMemoryTaskManager;
 import managers.*;
 import tasks.*;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.SubTask;
 import tasks.TaskStatus;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-//По неведомой мне причине, если проводить все тесты сразу выдаётся провал, однако при выполнении по одному всё нормально.
-//Возможно при последовательном выполнении остаются следы предыдущих тестов, хотя все переменные вроде создаются заново.
 
 abstract class TaskManagerTest<T extends TaskManager> {
 
@@ -23,7 +17,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
     protected Task task1;
     protected SubTask subTask1;
     protected EpicTask epicTask1;
-
 
 
     @Test
@@ -35,7 +28,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void createSubTask() {
-        SubTask createdSubTask = taskManager.create(subTask1);
+        SubTask createdSubTask = (SubTask) taskManager.create(subTask1);
         assertEquals(subTask1, createdSubTask);
         assertTrue(taskManager.getSubTasks().containsKey(createdSubTask.getId()));
     }
@@ -43,7 +36,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void createEpicTask() {
         taskManager.create(subTask1);
-        EpicTask createdEpicTask = taskManager.create(epicTask1);
+        EpicTask createdEpicTask = (EpicTask) taskManager.create(epicTask1);
         assertEquals(epicTask1, createdEpicTask);
         assertTrue(taskManager.getEpicTasks().containsKey(createdEpicTask.getId()));
     }
@@ -135,7 +128,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
 
-
     @Test
     void getTaskByID() {
         taskManager.create(task1);
@@ -151,6 +143,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void getEpicByID() {
+        taskManager.create(subTask1);
         taskManager.create(epicTask1);
         assertEquals(epicTask1, taskManager.getEpicByID(epicTask1.getId()));
     }

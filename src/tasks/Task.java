@@ -6,6 +6,8 @@ import java.util.Objects;
 
 public class Task {
 
+    protected TaskType type;
+
     protected static final DateTimeFormatter Format = DateTimeFormatter.ofPattern("yyyy.MM.dd-HH.mm.ss");
     protected String name;
     protected String description;
@@ -19,12 +21,14 @@ public class Task {
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
+        type = TaskType.TASK;
     }
 
     public Task(String name, String description, TaskStatus status) {
         this.name = name;
         this.description = description;
         this.status = status;
+        type = TaskType.TASK;
     }
 
     public Task(String name, String description, int duration, TaskStatus status, LocalDateTime startTime) {
@@ -34,6 +38,7 @@ public class Task {
         this.status = status;
         this.startTime = startTime;
         calculateEndTime();
+        type = TaskType.TASK;
     }
 
     public Task(String name, String description, TaskStatus status, LocalDateTime startTime, LocalDateTime endTime, int duration) {
@@ -43,9 +48,10 @@ public class Task {
         this.status = status;
         this.startTime = startTime;
         this.endTime = endTime;
+        type = TaskType.TASK;
     }
 
-    public Task( int id, String name, String description, TaskStatus status, LocalDateTime startTime, LocalDateTime endTime) {
+    public Task(int id, String name, String description, TaskStatus status, LocalDateTime startTime, LocalDateTime endTime) {
         this.name = name;
         this.description = description;
         this.id = id;
@@ -53,6 +59,7 @@ public class Task {
         this.status = status;
         this.startTime = startTime;
         this.endTime = endTime;
+        type = TaskType.TASK;
     }
 
     public Task(String name, String description, int id, int duration, TaskStatus status, LocalDateTime startTime, LocalDateTime endTime) {
@@ -63,6 +70,7 @@ public class Task {
         this.status = status;
         this.startTime = startTime;
         this.endTime = endTime;
+        type = TaskType.TASK;
     }
 
     public void setId(int id) {
@@ -84,7 +92,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return id + "," + TaskType.TASK + "," + name + "," + status + "," + description + ",0,"
+        return id + "," + type + "," + name + "," + status + "," + description + ",0,"
                 + startTime.format(Format) + ","
                 + getEndTime().format(Format) + "," + duration;
     }
@@ -145,7 +153,7 @@ public class Task {
         return endTime;
     }
 
-    protected void calculateEndTime(){
+    protected void calculateEndTime() {
         this.endTime = startTime.plusMinutes(duration);
     }
 
@@ -166,10 +174,10 @@ public class Task {
         return Objects.hash(name, description, duration, status, startTime, endTime);
     }
 
-    public static Task copyOf(Task task){
-        if (task!=null){
-            return new Task(task.getName(),task.getDescription(), task.getId(),task.getDuration(), task.getStatus(),
-                task.getStartTime(),task.getEndTime());
+    public static Task copyOf(Task task) {
+        if (task != null) {
+            return new Task(task.getName(), task.getDescription(), task.getId(), task.getDuration(), task.getStatus(),
+                    task.getStartTime(), task.getEndTime());
         } else {
             return null;
         }
@@ -185,5 +193,9 @@ public class Task {
 
     public int getDuration() {
         return duration;
+    }
+
+    public TaskType getType() {
+        return type;
     }
 }

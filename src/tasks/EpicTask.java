@@ -9,22 +9,25 @@ public class EpicTask extends Task {
 
     public EpicTask(String name, String description) {
         super(name, description);
-
+        type = TaskType.EPIC;
     }
 
     public EpicTask(String name, String description, LocalDateTime endTime) {
         super(name, description);
         this.endTime = endTime;
+        type = TaskType.EPIC;
     }
 
-    public EpicTask(int id, String name, String description, TaskStatus status, LocalDateTime startTime, LocalDateTime endTime){
+    public EpicTask(int id, String name, String description, TaskStatus status, LocalDateTime startTime, LocalDateTime endTime) {
         super(id, name, description, status, startTime, endTime);
+        type = TaskType.EPIC;
 
     }
 
     public EpicTask(String name, String description, int id, int duration, TaskStatus status, LocalDateTime startTime, LocalDateTime endTime, ArrayList<Integer> subIds) {
         super(name, description, id, duration, status, startTime, endTime);
         this.subIds = subIds;
+        type = TaskType.EPIC;
     }
 
 
@@ -39,7 +42,7 @@ public class EpicTask extends Task {
 
     @Override
     public String toString() {
-        return id + "," + TaskType.EPIC + "," + name + "," + status + "," + description + ",0,"
+        return id + "," + type + "," + name + "," + status + "," + description + ",0,"
                 + startTime.format(Format) + ","
                 + getEndTime().format(Format) + "," + duration;
     }
@@ -49,10 +52,10 @@ public class EpicTask extends Task {
         this.endTime = endTime;
     }
 
-    public static EpicTask copyOf(EpicTask task){
-        if (task!=null){
-            return new EpicTask(task.getName(),task.getDescription(), task.getId(),task.getDuration(), task.getStatus(),
-                    task.getStartTime(),task.getEndTime(),task.getSubIds());
+    public static EpicTask copyOf(EpicTask task) {
+        if (task != null) {
+            return new EpicTask(task.getName(), task.getDescription(), task.getId(), task.getDuration(), task.getStatus(),
+                    task.getStartTime(), task.getEndTime(), task.getSubIds());
         } else {
             return null;
         }

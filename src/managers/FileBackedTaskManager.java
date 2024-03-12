@@ -15,27 +15,25 @@ import java.util.List;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
-public class FileBackedTasksManager extends InMemoryTaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager {
+
+    private final String path;
+
+    public FileBackedTaskManager(String fileName) {
+        this.path = fileName;
+    }
+
+    public FileBackedTaskManager() {
+        this.path = "manager.csv";
+    }
+
     @Override
-    public Task create(Task task){
+    public Task create(Task task) {
         Task task1 = super.create(task);
         save();
         return task1;
     }
 
-    @Override
-    public EpicTask create(EpicTask task) {
-        EpicTask task1 = super.create(task);
-        save();
-        return task1;
-    }
-
-    @Override
-    public SubTask create(SubTask task) {
-        SubTask task1 = super.create(task);
-        save();
-        return task1;
-    }
 
     @Override
     public void update(Task task) {
@@ -137,9 +135,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         save();
     }
 
-    public static FileBackedTasksManager loadFromFile() {
+    public static FileBackedTaskManager loadFromFile(String fileName) {
         try {
-            Path sourceFile = Paths.get("manager.csv");
+            Path sourceFile = Paths.get(fileName);
             Path targetFile = Paths.get("manager_temp.csv");
             Files.copy(sourceFile, targetFile, REPLACE_EXISTING);
         } catch (IOException e) {
@@ -152,10 +150,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 lines.add(line);
             }
             lines.remove(0);
-            FileBackedTasksManager manager = new FileBackedTasksManager();
+            FileBackedTaskManager manager = new FileBackedTaskManager(fileName);
             if (!lines.isEmpty()) {
                 int i = 0;
-                while (!lines.get(i).isBlank() & i != lines.size()) {
+                while (i != lines.size() && !lines.get(i).isBlank()) {
                     manager.create(Task.fromString(lines.get(i)));
                     i++;
                 }
@@ -175,7 +173,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
-            return null;
+            return new FileBackedTaskManager(fileName);
         }
 
     }
@@ -183,7 +181,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     private void save() {
         try {
-            try (Writer fileWriter = new FileWriter("manager.csv")) {
+            try (Writer fileWriter = new FileWriter(path)) {
                 fileWriter.write("id,type,name,status,description,epic,startTime,endTime,duration\n");
                 List<String> temp = new ArrayList<>();
                 if (!tasks.isEmpty()) {

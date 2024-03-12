@@ -1,7 +1,7 @@
 package managers;
 
 
-import exceptions.TaskCrossException;
+import exceptions.TaskException;
 import tasks.EpicTask;
 import tasks.SubTask;
 import tasks.Task;
@@ -14,7 +14,9 @@ import java.util.*;
 public class InMemoryTaskManager implements TaskManager {
     private int nextId = 1;
     HistoryManager historyManager;
-
+    HashMap<Integer, Task> tasks = new HashMap<>();
+    HashMap<Integer, EpicTask> epicTasks = new HashMap<>();
+    HashMap<Integer, SubTask> subTasks = new HashMap<>();
 
 
     TreeSet<Task> sortedTasks = new TreeSet<>(
@@ -33,9 +35,28 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public Task create(Task task) {
-        try{
+        try {
+            switch (task.getType()) {
+                case TASK:
+                    return createTask(task);
+                case EPIC:
+                    return createEpic((EpicTask) task);
+                case SUBTASK:
+                    return createSubTask((SubTask) task);
+                default:
+                    throw new TaskException("Неподдерживаемый тип задачи");
+            }
+        } catch (TaskException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+    }
+
+    public Task createTask(Task task) {
+        try {
             addToSorted(task);
-        } catch (TaskCrossException e){
+        } catch (TaskException e) {
             System.out.println(e.getMessage());
             return task;
         }
@@ -45,10 +66,10 @@ public class InMemoryTaskManager implements TaskManager {
         return task;
     }
 
-    public SubTask create(SubTask task) {
-        try{
+    public SubTask createSubTask(SubTask task) {
+        try {
             addToSorted(task);
-        } catch (TaskCrossException e){
+        } catch (TaskException e) {
             System.out.println(e.getMessage());
             return task;
         }
@@ -58,11 +79,11 @@ public class InMemoryTaskManager implements TaskManager {
         return task;
     }
 
-    public EpicTask create(EpicTask task) {
+    public EpicTask createEpic(EpicTask task) {
         task.setId(nextId);
         nextId++;
         epicTasks.put(task.getId(), task);
-        if (task.getSubIds() != null) {
+        if (task.getSubIds() != null && !task.getSubIds().isEmpty()) {
             for (int id : task.getSubIds()) {
                 SubTask subTask = subTasks.get(id);
                 subTask.setEpicId(task.getId());
@@ -130,7 +151,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteEpicTasks() {
         historyManager.removeEpicTasks(epicTasks);
         for (EpicTask task : epicTasks.values()) {
-            if (!task.getSubIds().isEmpty()){
+            if (!task.getSubIds().isEmpty()) {
                 ArrayList<Integer> subtasks = new ArrayList<>(task.getSubIds());
                 for (int i : subtasks) {
                     deleteById(i);
@@ -159,20 +180,33 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     public Task getTaskByID(int id) {
-        historyManager.add(tasks.get(id));
-        return tasks.get(id);
+        if (tasks.containsKey(id)) {
+            historyManager.add(tasks.get(id));
+            return tasks.get(id);
+        } else {
+            return null;
+        }
+
 
     }
 
 
     public SubTask getSubByID(int id) {
-        historyManager.add(subTasks.get(id));
-        return subTasks.get(id);
+        if (subTasks.containsKey(id)) {
+            historyManager.add(subTasks.get(id));
+            return subTasks.get(id);
+        } else {
+            return null;
+        }
     }
 
     public EpicTask getEpicByID(int id) {
-        historyManager.add(epicTasks.get(id));
-        return epicTasks.get(id);
+        if (epicTasks.containsKey(id)) {
+            historyManager.add(epicTasks.get(id));
+            return epicTasks.get(id);
+        } else {
+            return null;
+        }
     }
 
     public void deleteById(int id) {
@@ -209,7 +243,7 @@ public class InMemoryTaskManager implements TaskManager {
         int doneSubs = 0;
         LocalDateTime tempStartTime = LocalDateTime.MAX;
         LocalDateTime tempEndTime = LocalDateTime.MIN;
-        if (task.getSubIds() != null) {
+        if (task.getSubIds() != null && !task.getSubIds().isEmpty()) {
             for (int id : task.getSubIds()) {
                 SubTask subTask = subTasks.get(id);
                 if (subTask.getStartTime().isBefore(tempStartTime)) {
@@ -231,6 +265,8 @@ public class InMemoryTaskManager implements TaskManager {
             }
 
         } else {
+            tempStartTime = LocalDateTime.of(0, 1, 1, 0, 0, 0);
+            tempEndTime = LocalDateTime.of(0, 1, 1, 0, 0, 0);
             status = TaskStatus.NEW;
         }
         task.setStartTime(tempStartTime);
@@ -248,14 +284,16 @@ public class InMemoryTaskManager implements TaskManager {
         return sortedTasks;
     }
 
-    protected boolean addToSorted(Task task){
+    protected boolean addToSorted(Task task) {
         for (Task existingTask : sortedTasks) {
             if (task.getStartTime().isBefore(existingTask.getEndTime()) &&
                     task.getEndTime().isAfter(existingTask.getStartTime())) {
-                throw new TaskCrossException("Ошибка! На это время уже есть задача");
+                throw new TaskException("Ошибка! На это время уже есть задача");
             }
         }
 
         return sortedTasks.add(task);
     }
+
+
 }

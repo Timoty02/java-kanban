@@ -2,7 +2,7 @@ package managers;
 
 public class Managers {
     public static TaskManager getDefault() {
-        return new FileBackedTasksManager();
+        return new FileBackedTaskManager();
     }
 
     public static HistoryManager getDefaultHistory() {
