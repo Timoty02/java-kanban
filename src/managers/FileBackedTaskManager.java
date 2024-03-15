@@ -36,21 +36,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
 
     @Override
-    public void update(Task task) {
-        super.update(task);
+    public Task update(Task task){
+        Task task1 = super.update(task);
         save();
-    }
-
-    @Override
-    public void update(EpicTask task) {
-        super.update(task);
-        save();
-    }
-
-    @Override
-    public void update(SubTask task) {
-        super.update(task);
-        save();
+        return task1;
     }
 
     @Override
@@ -117,9 +106,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void deleteById(int id) {
+    public Task deleteById(int id) {
         super.deleteById(id);
         save();
+        return null;
     }
 
     @Override
@@ -159,10 +149,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 }
                 try {
                     i++;
-                    String[] temps = lines.get(i).split(",");
-                    for (String temp : temps) {
-                        int id = Integer.parseInt(temp);
-                        manager.getTaskByID(id);
+                    List<Integer> temps = historyFromString(lines.get(i));
+                    //String[] temps = lines.get(i).split(",");
+                    for (Integer temp : temps) {
+                        manager.getTaskByID(temp);
                     }
                 } catch (IndexOutOfBoundsException ignored) {
 
@@ -184,7 +174,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             try (Writer fileWriter = new FileWriter(path)) {
                 fileWriter.write("id,type,name,status,description,epic,startTime,endTime,duration\n");
                 List<String> temp = new ArrayList<>();
-                if (!tasks.isEmpty()) {
+                if (!sortedTasksById.isEmpty()){
+                    for (Task task : sortedTasksById) {
+                        temp.add(task.toString() + "\n");
+                    }
+                }
+                /*if (!tasks.isEmpty()) {
                     for (Task task : tasks.values()) {
                         temp.add(task.toString() + "\n");
                     }
@@ -200,7 +195,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     for (SubTask task : subTasks.values()) {
                         temp.add(task.toString() + "\n");
                     }
-                }
+                }*/
 
                 if (!historyManager.getHistory().isEmpty()) {
                     temp.add("\n");

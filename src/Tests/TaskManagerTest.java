@@ -47,7 +47,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         Task updatedTask = new Task(task1.getId(), "Updated Task 1", "Updated Description 1", TaskStatus.DONE,
                 LocalDateTime.of(2023, 1, 1, 12, 0), LocalDateTime.of(2023, 1, 1, 13, 0));
         taskManager.update(updatedTask);
-        assertEquals(updatedTask, taskManager.getTaskByID(updatedTask.getId()));
+        assertEquals(updatedTask, taskManager.getByID(updatedTask.getId()));
     }
 
     @Test
@@ -57,7 +57,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         SubTask updatedSubTask = new SubTask(subTask1.getId(), "Updated Subtask 1", "Updated Description 1", TaskStatus.DONE,
                 LocalDateTime.of(2023, 1, 1, 12, 0), LocalDateTime.of(2023, 1, 1, 13, 0), 2);
         taskManager.update(updatedSubTask);
-        assertEquals(updatedSubTask, taskManager.getSubByID(updatedSubTask.getId()));
+        assertEquals(updatedSubTask, taskManager.getByID(updatedSubTask.getId()));
     }
 
     @Test
@@ -67,7 +67,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         EpicTask updatedEpicTask = new EpicTask(epicTask1.getId(), "Updated Epic Task 1", "Updated Description 1", TaskStatus.DONE,
                 LocalDateTime.of(2023, 1, 1, 12, 0), LocalDateTime.of(2023, 1, 1, 13, 0));
         taskManager.update(updatedEpicTask);
-        assertEquals(updatedEpicTask, taskManager.getEpicByID(updatedEpicTask.getId()));
+        assertEquals(updatedEpicTask, taskManager.getByID(updatedEpicTask.getId()));
     }
 
     @Test
@@ -131,21 +131,21 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void getTaskByID() {
         taskManager.create(task1);
-        assertEquals(task1, taskManager.getTaskByID(task1.getId()));
+        assertEquals(task1, taskManager.getByID(task1.getId()));
     }
 
     @Test
     void getSubByID() {
         taskManager.create(subTask1);
         taskManager.create(epicTask1);
-        assertEquals(subTask1, taskManager.getSubByID(subTask1.getId()));
+        assertEquals(subTask1, taskManager.getByID(subTask1.getId()));
     }
 
     @Test
     void getEpicByID() {
         taskManager.create(subTask1);
         taskManager.create(epicTask1);
-        assertEquals(epicTask1, taskManager.getEpicByID(epicTask1.getId()));
+        assertEquals(epicTask1, taskManager.getByID(epicTask1.getId()));
     }
 
     @Test
@@ -176,10 +176,10 @@ abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.create(subTask1);
         taskManager.create(epicTask1);
         taskManager.update(subTask1);
-        assertEquals(TaskStatus.NEW, taskManager.getEpicByID(epicTask1.getId()).getStatus());
+        assertEquals(TaskStatus.NEW, taskManager.getByID(epicTask1.getId()).getStatus());
         subTask1.setStatus(TaskStatus.DONE);
         taskManager.update(subTask1);
-        assertEquals(TaskStatus.DONE, taskManager.getEpicByID(epicTask1.getId()).getStatus());
+        assertEquals(TaskStatus.DONE, taskManager.getByID(epicTask1.getId()).getStatus());
 
     }
 
@@ -189,9 +189,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.create(subTask1);
         taskManager.create(epicTask1);
         taskManager.create(task1);
-        taskManager.getEpicByID(2);
-        taskManager.getTaskByID(3);
-        taskManager.getSubByID(1);
+        taskManager.getByID(2);
+        taskManager.getByID(3);
+        taskManager.getByID(1);
         assertEquals(3, taskManager.getHistory().size());
         assertTrue(taskManager.getHistory().contains(task1));
         assertTrue(taskManager.getHistory().contains(subTask1));

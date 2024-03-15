@@ -18,8 +18,19 @@ public class InMemoryTaskManager implements TaskManager {
     HashMap<Integer, EpicTask> epicTasks = new HashMap<>();
     HashMap<Integer, SubTask> subTasks = new HashMap<>();
 
+    TreeSet<Task> sortedTasksById = new TreeSet<>(
+            (Task task1, Task task2) -> {
+                if (task1.getId() == 0) {
+                    return 1;
+                }
+                if (task2.getId() == 0) {
+                    return -1;
+                }
+                return task1.getId()-task2.getId();
+            });
 
-    TreeSet<Task> sortedTasks = new TreeSet<>(
+
+    TreeSet<Task> sortedTasksByStartTime = new TreeSet<>(
             (Task task1, Task task2) -> {
                 if (task1.getStartTime() == null) {
                     return 1;
@@ -46,48 +57,54 @@ public class InMemoryTaskManager implements TaskManager {
                 default:
                     throw new TaskException("Неподдерживаемый тип задачи");
             }
-        } catch (TaskException e){
+        } catch (TaskException e) {
             System.out.println(e.getMessage());
             return null;
         }
 
     }
 
-    public Task createTask(Task task) {
+    protected Task createTask(Task task) {
+        task.setId(nextId);
         try {
             addToSorted(task);
+            sortedTasksById.add(task);
         } catch (TaskException e) {
             System.out.println(e.getMessage());
+            task.setId(0);
             return task;
         }
-        task.setId(nextId);
         nextId++;
         tasks.put(task.getId(), task);
         return task;
     }
 
-    public SubTask createSubTask(SubTask task) {
+    protected SubTask createSubTask(SubTask task) {
+        task.setId(nextId);
         try {
             addToSorted(task);
+            sortedTasksById.add(task);
         } catch (TaskException e) {
             System.out.println(e.getMessage());
+            task.setId(0);
             return task;
         }
-        task.setId(nextId);
+
         nextId++;
         subTasks.put(task.getId(), task);
         return task;
     }
 
-    public EpicTask createEpic(EpicTask task) {
+    protected EpicTask createEpic(EpicTask task) {
         task.setId(nextId);
+        sortedTasksById.add(task);
         nextId++;
         epicTasks.put(task.getId(), task);
         if (task.getSubIds() != null && !task.getSubIds().isEmpty()) {
             for (int id : task.getSubIds()) {
                 SubTask subTask = subTasks.get(id);
                 subTask.setEpicId(task.getId());
-                update(subTask);
+                updateSubTask(subTask);
             }
         }
         epicUpdater(task);
@@ -95,19 +112,51 @@ public class InMemoryTaskManager implements TaskManager {
 
     }
 
-    public void update(Task task) {
-        tasks.put(task.getId(), task);
+    public Task update(Task task) {
+        try {
+            switch (task.getType()) {
+                case TASK:
+                    return updateTask(task);
+                case EPIC:
+                    return updateEpic((EpicTask) task);
+                case SUBTASK:
+                    return updateSubTask((SubTask) task);
+                default:
+                    throw new TaskException("Неподдерживаемый тип задачи");
+            }
+        } catch (TaskException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
-    public void update(SubTask task) {
-        EpicTask epicTask = epicTasks.get(task.getEpicId());
-        epicUpdater(epicTask);
-        subTasks.put(task.getId(), task);
+    protected Task updateTask(Task task) throws TaskException {
+        if (tasks.containsKey(task.getId())) {
+            tasks.put(task.getId(), task);
+            return task;
+        } else {
+            throw new TaskException("Невозможно обновить несуществующую задачу");
+        }
     }
 
-    public void update(EpicTask task) {
+    protected SubTask updateSubTask(SubTask task) {
+        if (subTasks.containsKey(task.getId())) {
+            EpicTask epicTask = epicTasks.get(task.getEpicId());
+            epicUpdater(epicTask);
+            subTasks.put(task.getId(), task);
+            return task;
+        } else {
+            throw new TaskException("Невозможно обновить несуществующую задачу");
+        }
+    }
 
-        epicTasks.put(task.getId(), task);
+    protected EpicTask updateEpic(EpicTask task) {
+        if (epicTasks.containsKey(task.getId())) {
+            epicTasks.put(task.getId(), task);
+            return task;
+        } else {
+            throw new TaskException("Невозможно обновить несуществующую задачу");
+        }
     }
 
     public HashMap<Integer, Task> getTasks() {
@@ -179,7 +228,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     }
 
-    public Task getTaskByID(int id) {
+    protected Task getTaskByID(int id) {
         if (tasks.containsKey(id)) {
             historyManager.add(tasks.get(id));
             return tasks.get(id);
@@ -191,7 +240,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
 
-    public SubTask getSubByID(int id) {
+    protected SubTask getSubByID(int id) {
         if (subTasks.containsKey(id)) {
             historyManager.add(subTasks.get(id));
             return subTasks.get(id);
@@ -200,7 +249,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    public EpicTask getEpicByID(int id) {
+    protected EpicTask getEpicByID(int id) {
         if (epicTasks.containsKey(id)) {
             historyManager.add(epicTasks.get(id));
             return epicTasks.get(id);
@@ -209,32 +258,51 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    public void deleteById(int id) {
-        tasks.remove(id);
-        subTasks.remove(id);
-        epicTasks.remove(id);
-        historyManager.remove(id);
-        for (EpicTask task : epicTasks.values()) {
-            ArrayList<Integer> subtasks = task.getSubIds();
-            if (subtasks.contains(id)) {
-                subtasks.remove(Integer.valueOf(id));
-                task.setSubIds(subtasks);
-                epicUpdater(task);
+    public Task deleteById(int id) {
+        try {
+            Task task;
+            if (tasks.containsKey(id)){
+                task = tasks.remove(id);
+            } else if (subTasks.containsKey(id)){
+                task = subTasks.remove(id);
+            } else if (epicTasks.containsKey(id)) {
+                task = epicTasks.remove(id);
+                for (EpicTask task1 : epicTasks.values()) {
+                    ArrayList<Integer> subtasks = task1.getSubIds();
+                    if (subtasks.contains(id)) {
+                        subtasks.remove(Integer.valueOf(id));
+                        task1.setSubIds(subtasks);
+                        epicUpdater(task1);
+                    }
+                }
+            } else {
+                throw new TaskException("Такой задачи не было в менеджере");
             }
-
+            historyManager.remove(id);
+            return task;
+        } catch (TaskException e){
+            System.out.println(e.getMessage());
+            return null;
         }
-
     }
 
     public ArrayList<SubTask> getSubsOfEpic(int id) {
-        EpicTask epicTask = epicTasks.get(id);
-        ArrayList<Integer> subIds = epicTask.getSubIds();
-        ArrayList<SubTask> subs = new ArrayList<>();
-        for (int i : subIds) {
-            subs.add(subTasks.get(i));
+        try {
+            if (epicTasks.containsKey(id)){
+                EpicTask epicTask = epicTasks.get(id);
+                ArrayList<Integer> subIds = epicTask.getSubIds();
+                ArrayList<SubTask> subs = new ArrayList<>();
+                for (int i : subIds) {
+                    subs.add(subTasks.get(i));
+                }
+                return subs;
+            } else {
+                throw new TaskException("Такого эпика не обнаружено");
+            }
+        } catch (TaskException e){
+            System.out.println(e.getMessage());
+            return null;
         }
-        return subs;
-
     }
 
     public void epicUpdater(EpicTask task) {
@@ -273,26 +341,26 @@ public class InMemoryTaskManager implements TaskManager {
         task.setEndTime(tempEndTime);
         task.setDuration((int) Duration.between(tempStartTime, tempEndTime).toMinutes());
         task.setStatus(status);
-        update(task);
+        updateEpic(task);
     }
 
     public List<Task> getHistory() {
         return historyManager.getHistory();
     }
 
-    public TreeSet<Task> getSortedTasks() {
-        return sortedTasks;
+    public TreeSet<Task> getSortedTasksByStartTime() {
+        return sortedTasksByStartTime;
     }
 
-    protected boolean addToSorted(Task task) {
-        for (Task existingTask : sortedTasks) {
+    protected void addToSorted(Task task) {
+        for (Task existingTask : sortedTasksByStartTime) {
             if (task.getStartTime().isBefore(existingTask.getEndTime()) &&
                     task.getEndTime().isAfter(existingTask.getStartTime())) {
                 throw new TaskException("Ошибка! На это время уже есть задача");
             }
         }
 
-        return sortedTasks.add(task);
+        sortedTasksByStartTime.add(task);
     }
 
 

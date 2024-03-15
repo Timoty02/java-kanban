@@ -15,11 +15,7 @@ public interface TaskManager {
 
     Task create(Task task);
 
-    void update(Task task);
-
-    void update(SubTask task);
-
-    void update(EpicTask task);
+    Task update(Task task);
 
     HashMap<Integer, Task> getTasks();
 
@@ -36,14 +32,9 @@ public interface TaskManager {
 
     void deleteAllTasks();
 
-    Task getTaskByID(int id);
+    public Task getByID(int id);
 
-
-    SubTask getSubByID(int id);
-
-    EpicTask getEpicByID(int id);
-
-    void deleteById(int id);
+    Task deleteById(int id);
 
     ArrayList<SubTask> getSubsOfEpic(int id);
 
@@ -52,6 +43,6 @@ public interface TaskManager {
     List<Task> getHistory();
 
 
-    TreeSet<Task> getSortedTasks();
+    TreeSet<Task> getSortedTasksByStartTime();
 
 }
