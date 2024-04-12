@@ -5,7 +5,6 @@ import tasks.EpicTask;
 import tasks.SubTask;
 import tasks.Task;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
@@ -36,7 +35,7 @@ public interface TaskManager {
 
     Task deleteById(int id);
 
-    ArrayList<SubTask> getSubsOfEpic(int id);
+    List<SubTask> getSubsOfEpic(int id);
 
     void epicUpdater(EpicTask task);
 

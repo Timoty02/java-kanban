@@ -10,6 +10,7 @@ import tasks.TaskStatus;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
     private int nextId = 1;
@@ -286,16 +287,13 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    public ArrayList<SubTask> getSubsOfEpic(int id) {
+    public List<SubTask> getSubsOfEpic(int id) {
         try {
             if (epicTasks.containsKey(id)){
                 EpicTask epicTask = epicTasks.get(id);
                 ArrayList<Integer> subIds = epicTask.getSubIds();
-                ArrayList<SubTask> subs = new ArrayList<>();
-                for (int i : subIds) {
-                    subs.add(subTasks.get(i));
-                }
-                return subs;
+
+                return subIds.stream().map(idTemp -> subTasks.get(idTemp)).collect(Collectors.toList());
             } else {
                 throw new TaskException("Такого эпика не обнаружено");
             }
