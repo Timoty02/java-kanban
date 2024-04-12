@@ -147,6 +147,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     manager.create(Task.fromString(lines.get(i)));
                     i++;
                 }
+                manager.setEpicsID();
                 try {
                     i++;
                     List<Integer> temps = historyFromString(lines.get(i));
@@ -237,6 +238,18 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
         return ids;
 
+    }
+
+    protected void setEpicsID(){
+        if (!subTasks.isEmpty()){
+            for (SubTask subTask:subTasks.values()){
+                if (epicTasks.containsKey(subTask.getEpicId())) {
+                    EpicTask task = epicTasks.get(subTask.getEpicId());
+                    task.addSubId(subTask.getId());
+                    updateEpic(task);
+                }
+            }
+        }
     }
 
 

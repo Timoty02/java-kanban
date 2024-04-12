@@ -60,4 +60,8 @@ public class EpicTask extends Task {
             return null;
         }
     }
+
+    public void addSubId(int id){
+        subIds.add(id);
+    }
 }
