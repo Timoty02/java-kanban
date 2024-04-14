@@ -298,7 +298,7 @@ public class InMemoryTaskManager implements TaskManager {
 
                 return subIds.stream().map(idTemp -> subTasks.get(idTemp)).collect(Collectors.toList());
             } else {
-                throw new TaskException("Такого эпика не обнаружено");
+                throw new TaskException("Эпика с id " + id + " не обнаружено");
             }
         } catch (TaskException e) {
             System.out.println(e.getMessage());
