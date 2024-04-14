@@ -169,7 +169,7 @@ public class Task {
         return duration == task.duration && Objects.equals(name, task.name)
             && Objects.equals(description, task.description) && status == task.status
             && Objects.equals(startTime, task.startTime) && Objects.equals(endTime, task.endTime);
-    }//логичнее было бы сравнивать поле id, но id выдаёт менеджер, что было бы проблемой в тестах
+    }
 
     @Override
     public int hashCode() {
