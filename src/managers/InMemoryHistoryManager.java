@@ -25,8 +25,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     public Task remove(int id) {
-        Task task = removeNode(taskHistory.remove(id));
-        return task;
+        return removeNode(taskHistory.remove(id));
     }
 
     public void removeTasks(Map<Integer, Task> tasks) {
@@ -38,8 +37,8 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     public void removeEpicTasks(Map<Integer, EpicTask> tasks) {
-        if (tasks.isEmpty()) {
-        } else {
+        if (!tasks.isEmpty()) {
+
             for (Integer i : tasks.keySet()) {
                 remove(tasks.get(i).getId());
                 /*if (!tasks.get(i).getSubIds().isEmpty()){
@@ -52,8 +51,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     public void removeSubTasks(Map<Integer, SubTask> tasks) {
-        if (tasks.isEmpty()) {
-        } else {
+        if (!tasks.isEmpty()) {
             for (Integer i : tasks.keySet()) {
                 remove(tasks.get(i).getId());
             }
@@ -65,7 +63,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     private Node<Task> linkLast(Task task) {
-        Node<Task> newNode = new Node<Task>(task, null, tail);
+        Node<Task> newNode = new Node<>(task, null, tail);
         size++;
         if (head == null) {
             head = newNode;
@@ -110,9 +108,8 @@ public class InMemoryHistoryManager implements HistoryManager {
     private List<Task> getTasks() {
         List<Task> historyTaskList = new ArrayList<>();
         Node<Task> nTask = tail;
-        if (nTask == null && head == null) {
-
-        } else if (nTask == null) {
+        //if (nTask == null && head == null) {
+        if (nTask == null && head != null) {
             historyTaskList.add(head.getData());
         } else {
             while (nTask != null) {
