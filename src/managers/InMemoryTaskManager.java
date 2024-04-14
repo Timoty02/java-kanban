@@ -27,7 +27,7 @@ public class InMemoryTaskManager implements TaskManager {
                 if (task2.getId() == 0) {
                     return -1;
                 }
-                return task1.getId()-task2.getId();
+                return task1.getId() - task2.getId();
             });
 
 
@@ -262,9 +262,9 @@ public class InMemoryTaskManager implements TaskManager {
     public Task deleteById(int id) {
         try {
             Task task;
-            if (tasks.containsKey(id)){
+            if (tasks.containsKey(id)) {
                 task = tasks.remove(id);
-            } else if (subTasks.containsKey(id)){
+            } else if (subTasks.containsKey(id)) {
                 task = subTasks.remove(id);
             } else if (epicTasks.containsKey(id)) {
                 task = epicTasks.remove(id);
@@ -281,7 +281,7 @@ public class InMemoryTaskManager implements TaskManager {
             }
             historyManager.remove(id);
             return task;
-        } catch (TaskException e){
+        } catch (TaskException e) {
             System.out.println(e.getMessage());
             return null;
         }
@@ -289,7 +289,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     public List<SubTask> getSubsOfEpic(int id) {
         try {
-            if (epicTasks.containsKey(id)){
+            if (epicTasks.containsKey(id)) {
                 EpicTask epicTask = epicTasks.get(id);
                 ArrayList<Integer> subIds = epicTask.getSubIds();
 
@@ -297,7 +297,7 @@ public class InMemoryTaskManager implements TaskManager {
             } else {
                 throw new TaskException("Такого эпика не обнаружено");
             }
-        } catch (TaskException e){
+        } catch (TaskException e) {
             System.out.println(e.getMessage());
             return null;
         }

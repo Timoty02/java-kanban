@@ -40,13 +40,6 @@ public class EpicTask extends Task {
         return subIds;
     }
 
-    @Override
-    public String toString() {
-        return id + "," + type + "," + name + "," + status + "," + description + ",0,"
-                + startTime.format(Format) + ","
-                + getEndTime().format(Format) + "," + duration;
-    }
-
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
@@ -61,7 +54,7 @@ public class EpicTask extends Task {
         }
     }
 
-    public void addSubId(int id){
+    public void addSubId(int id) {
         subIds.add(id);
     }
 }
