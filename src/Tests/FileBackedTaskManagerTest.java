@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
     @BeforeEach
@@ -90,7 +90,7 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
         try (BufferedInputStream fis1 = new BufferedInputStream(new FileInputStream(path1.toFile()));
              BufferedInputStream fis2 = new BufferedInputStream(new FileInputStream(path2.toFile()))) {
 
-            int ch = 0;
+            int ch;
             long pos = 1;
             while ((ch = fis1.read()) != -1) {
                 if (ch != fis2.read()) {
