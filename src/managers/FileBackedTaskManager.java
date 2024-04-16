@@ -1,6 +1,6 @@
 package managers;
 
-import exceptions.*;
+import exceptions.ManagerSaveException;
 import tasks.EpicTask;
 import tasks.SubTask;
 import tasks.Task;
@@ -36,7 +36,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
 
     @Override
-    public Task update(Task task){
+    public Task update(Task task) {
         Task task1 = super.update(task);
         save();
         return task1;
@@ -113,8 +113,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public ArrayList<SubTask> getSubsOfEpic(int id) {
-        ArrayList<SubTask> subTasks1 = super.getSubsOfEpic(id);
+    public List<SubTask> getSubsOfEpic(int id) {
+        List<SubTask> subTasks1 = super.getSubsOfEpic(id);
         save();
         return subTasks1;
     }
@@ -175,7 +175,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             try (Writer fileWriter = new FileWriter(path)) {
                 fileWriter.write("id,type,name,status,description,epic,startTime,endTime,duration\n");
                 List<String> temp = new ArrayList<>();
-                if (!sortedTasksById.isEmpty()){
+                if (!sortedTasksById.isEmpty()) {
                     for (Task task : sortedTasksById) {
                         temp.add(task.toString() + "\n");
                     }
@@ -240,9 +240,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     }
 
-    protected void setEpicsID(){
-        if (!subTasks.isEmpty()){
-            for (SubTask subTask:subTasks.values()){
+    protected void setEpicsID() {
+        if (!subTasks.isEmpty()) {
+            for (SubTask subTask : subTasks.values()) {
                 if (epicTasks.containsKey(subTask.getEpicId())) {
                     EpicTask task = epicTasks.get(subTask.getEpicId());
                     task.addSubId(subTask.getId());

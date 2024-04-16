@@ -14,10 +14,10 @@ public interface HistoryManager {
 
     List<Task> getHistory();
 
-    void removeTasks(Map<Integer, Task> Tasks);
+    void removeTasks(Map<Integer, Task> tasks);
 
     void removeEpicTasks(Map<Integer, EpicTask> epicTasks);
 
-    void removeSubTasks(Map<Integer, SubTask> SubTasks);
+    void removeSubTasks(Map<Integer, SubTask> subTasks);
 
 }

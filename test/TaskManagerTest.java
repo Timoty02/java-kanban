@@ -1,14 +1,16 @@
-package Tests;
+package test;
 
-import managers.*;
-import tasks.*;
+import managers.TaskManager;
 import org.junit.jupiter.api.Test;
+import tasks.EpicTask;
 import tasks.SubTask;
+import tasks.Task;
 import tasks.TaskStatus;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 abstract class TaskManagerTest<T extends TaskManager> {
 
@@ -44,8 +46,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void updateTask() {
         taskManager.create(task1);
-        Task updatedTask = new Task(task1.getId(), "Updated Task 1", "Updated Description 1", TaskStatus.DONE,
-                LocalDateTime.of(2023, 1, 1, 12, 0), LocalDateTime.of(2023, 1, 1, 13, 0));
+        Task updatedTask = Task.copyOf(task1);
+        updatedTask.setName("Updated Task 1");
+        updatedTask.setName("Updated Description 1");
+        //Task updatedTask = new Task(task1.getId(), "Updated Task 1", "Updated Description 1", TaskStatus.DONE,
+        //       LocalDateTime.of(2023, 1, 1, 12, 0), LocalDateTime.of(2023, 1, 1, 13, 0));
         taskManager.update(updatedTask);
         assertEquals(updatedTask, taskManager.getByID(updatedTask.getId()));
     }
@@ -54,8 +59,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
     void updateSubTask() {
         taskManager.create(subTask1);
         taskManager.create(epicTask1);
-        SubTask updatedSubTask = new SubTask(subTask1.getId(), "Updated Subtask 1", "Updated Description 1", TaskStatus.DONE,
-                LocalDateTime.of(2023, 1, 1, 12, 0), LocalDateTime.of(2023, 1, 1, 13, 0), 2);
+        SubTask updatedSubTask = SubTask.copyOf(subTask1);
+        updatedSubTask.setName("Updated Subtask 1");
+        updatedSubTask.setDescription("Updated Description 1");
+        //SubTask updatedSubTask = new SubTask(subTask1.getId(), "Updated Subtask 1", "Updated Description 1", TaskStatus.DONE,
+        //        LocalDateTime.of(2023, 1, 1, 12, 0), LocalDateTime.of(2023, 1, 1, 13, 0), 2);
         taskManager.update(updatedSubTask);
         assertEquals(updatedSubTask, taskManager.getByID(updatedSubTask.getId()));
     }

@@ -166,8 +166,10 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return duration == task.duration && Objects.equals(name, task.name) && Objects.equals(description, task.description) && status == task.status && Objects.equals(startTime, task.startTime) && Objects.equals(endTime, task.endTime);
-    }//логичнее было бы сравнивать поле id, но id выдаёт менеджер, что было бы проблемой в тестах
+        return duration == task.duration && Objects.equals(name, task.name)
+            && Objects.equals(description, task.description) && status == task.status
+            && Objects.equals(startTime, task.startTime) && Objects.equals(endTime, task.endTime);
+    }
 
     @Override
     public int hashCode() {
@@ -197,5 +199,13 @@ public class Task {
 
     public TaskType getType() {
         return type;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
