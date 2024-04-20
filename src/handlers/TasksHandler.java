@@ -16,35 +16,39 @@ public class TasksHandler extends FuncHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        String method = exchange.getRequestMethod();
-        String[] uri = exchange.getRequestURI().getPath().split("/");
-        switch (method) {
-            case "GET":
-                if (uri.length == 2 && uri[1].equals("tasks")) {
-                    handleGetAllTasks(exchange);
-                } else if (uri.length == 3 && uri[1].equals("tasks")) {
-                    handleGetTaskById(exchange);
-                } else {
+        try {
+            String method = exchange.getRequestMethod();
+            String[] uri = exchange.getRequestURI().getPath().split("/");
+            switch (method) {
+                case "GET":
+                    if (uri.length == 2 && uri[1].equals("tasks")) {
+                        handleGetAllTasks(exchange);
+                    } else if (uri.length == 3 && uri[1].equals("tasks")) {
+                        handleGetTaskById(exchange);
+                    } else {
+                        writeResponse(exchange, "Некорректный URL", 400);
+                    }
+                    break;
+                case "POST":
+                    if (uri.length == 2 && uri[1].equals("tasks")) {
+                        handlePostTask(exchange);
+                    } else {
+                        writeResponse(exchange, "Некорректный URL", 400);
+                    }
+                    break;
+                case "DELETE":
+                    if (uri.length == 3 && uri[1].equals("tasks")) {
+                        handleDeleteTask(exchange);
+                    } else {
+                        writeResponse(exchange, "Некорректный URL", 400);
+                    }
+                    break;
+                default:
                     writeResponse(exchange, "Некорректный URL", 400);
-                }
-                break;
-            case "POST":
-                if (uri.length == 2 && uri[1].equals("tasks")) {
-                    handlePostTask(exchange);
-                } else {
-                    writeResponse(exchange, "Некорректный URL", 400);
-                }
-                break;
-            case "DELETE":
-                if (uri.length == 3 && uri[1].equals("tasks")) {
-                    handleDeleteTask(exchange);
-                } else {
-                    writeResponse(exchange, "Некорректный URL", 400);
-                }
-                break;
-            default:
-                writeResponse(exchange, "Некорректный URL", 400);
-                break;
+                    break;
+            }
+        } catch (Exception e){
+            writeResponse(exchange, "Произошла ошибка сервера", 500);
         }
         //HttpTaskServer.stop();
     }
