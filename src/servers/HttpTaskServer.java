@@ -14,7 +14,7 @@ public class HttpTaskServer {
     private static final int PORT = 8080;
     private static HttpServer httpServer;
 
-    public static void main(String[] args) throws IOException {
+    public HttpTaskServer() throws IOException {
         manager = Managers.getDefault();
         httpServer = HttpServer.create(new InetSocketAddress(PORT), 0);
         httpServer.createContext("/tasks", new TasksHandler());
@@ -22,8 +22,11 @@ public class HttpTaskServer {
         httpServer.createContext("/epics", new EpicsHandler());
         httpServer.createContext("/prioritized", new PrioritizedHandler());
         httpServer.createContext("/history", new HistoryHandler());
-        httpServer.start();
-        System.out.println("HTTP-сервер запущен на " + PORT + " порту!");
+    }
+
+    public static void main(String[] args) throws IOException {
+        HttpTaskServer server = new HttpTaskServer();
+        server.start();
         System.out.println("Чтобы остановить напечайте s");
         Scanner scanner = new Scanner(System.in);
         String code = scanner.next();
@@ -36,5 +39,10 @@ public class HttpTaskServer {
 
     public static void stop() {
         httpServer.stop(10);
+    }
+
+    public void start() throws IOException{
+        httpServer.start();
+        System.out.println("HTTP-сервер запущен на " + PORT + " порту!");
     }
 }
