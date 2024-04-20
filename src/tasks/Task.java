@@ -167,8 +167,8 @@ public class Task {
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
         return duration == task.duration && Objects.equals(name, task.name)
-            && Objects.equals(description, task.description) && status == task.status
-            && Objects.equals(startTime, task.startTime) && Objects.equals(endTime, task.endTime);
+                && Objects.equals(description, task.description) && status == task.status
+                && Objects.equals(startTime, task.startTime) && Objects.equals(endTime, task.endTime);
     }
 
     @Override
