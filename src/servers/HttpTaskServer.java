@@ -1,9 +1,7 @@
 package servers;
 
 import com.sun.net.httpserver.HttpServer;
-import handlers.PrioritizedHandler;
-import handlers.SubtasksHandler;
-import handlers.TasksHandler;
+import handlers.*;
 import managers.Managers;
 import managers.TaskManager;
 
@@ -21,7 +19,9 @@ public class HttpTaskServer {
         httpServer = HttpServer.create(new InetSocketAddress(PORT), 0);
         httpServer.createContext("/tasks", new TasksHandler());
         httpServer.createContext("/subtasks", new SubtasksHandler());
+        httpServer.createContext("/epics", new EpicsHandler());
         httpServer.createContext("/prioritized", new PrioritizedHandler());
+        httpServer.createContext("/history", new HistoryHandler());
         httpServer.start();
         System.out.println("HTTP-сервер запущен на " + PORT + " порту!");
         System.out.println("Чтобы остановить напечайте s");
