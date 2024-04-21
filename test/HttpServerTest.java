@@ -36,7 +36,7 @@ public class HttpServerTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        gson = new Gson();
+        gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
         server = new HttpTaskServer();
         server.start();
