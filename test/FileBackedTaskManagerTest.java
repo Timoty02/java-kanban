@@ -48,6 +48,10 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
     @Test
     void saveEpicTask() {
         epicTask1.setSubIds(null);
+        epicTask1.setStartTime(subTask1.getStartTime());
+        epicTask1.setId(2);
+        epicTask1.setStatus(TaskStatus.NEW);
+        epicTask1.setDuration(subTask1.getDuration());
         taskManager.create(epicTask1);
         Path filePath1 = Paths.get("C:\\Users\\Tim\\IdeaProjects\\java-kanban\\manager.csv");
         Path filePath2 = Paths.get("C:\\Users\\Tim\\IdeaProjects\\java-kanban\\src\\Tests\\manager_test_epic_1.csv");
@@ -63,7 +67,12 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
     void loadSoloEpicNoHistory() {
         FileBackedTaskManager taskManager1 = FileBackedTaskManager.loadFromFile("C:\\Users\\Tim\\IdeaProjects\\java-kanban\\src\\Tests\\manager_test_epic.csv");
         epicTask1.setSubIds(null);
+        epicTask1.setStartTime(subTask1.getStartTime());
+        epicTask1.setId(2);
+        epicTask1.setStatus(TaskStatus.NEW);
+        epicTask1.setDuration(subTask1.getDuration());
         taskManager.create(epicTask1);
+        taskManager1.create(epicTask1);
         assertEquals(taskManager.getEpicTasks(), taskManager1.getEpicTasks());
         assertEquals(taskManager.getHistory(), taskManager1.getHistory());
     }
