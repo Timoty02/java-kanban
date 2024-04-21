@@ -1,7 +1,6 @@
 package test;
 
 import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
 import managers.Managers;
 import managers.TaskManager;
 import org.junit.jupiter.api.AfterEach;
@@ -26,24 +25,6 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-
-class MapTasksTypeToken extends TypeToken<Map<Integer, Task>> {
-
-}
-
-class SubTasksTypeToken extends TypeToken<List<SubTask>> {
-
-}
-
-
-
-class MapSubTasksTypeToken extends TypeToken<Map<Integer, SubTask>> {
-
-}
-
-class MapEpicTasksTypeToken extends TypeToken<Map<Integer, EpicTask>> {
-
-}
 
 public class HttpServerTest {
     HttpTaskServer server;
@@ -317,7 +298,7 @@ public class HttpServerTest {
     }
 
     @Test
-    public void PrioritizedTest() throws IOException, InterruptedException {
+    public void prioritizedTest() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:8080/prioritized"))
                 .GET()

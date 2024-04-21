@@ -8,7 +8,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-abstract public class FuncHandler {
+abstract class FuncHandler {
     protected static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
     protected void writeResponse(HttpExchange exchange, String responseString, int responseCode) throws IOException {
