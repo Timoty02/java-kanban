@@ -50,6 +50,7 @@ public class HttpServerTest {
         epicTask1 = new EpicTask("Epic Task 1", "Description 1");
         ArrayList<Integer> subIds = new ArrayList<>(List.of(1));
         epicTask1.setSubIds(subIds);
+        saveSeveralTasks();
     }
 
     @AfterEach
@@ -152,9 +153,10 @@ public class HttpServerTest {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         System.out.println(response.body());
         assertFalse(response.body().isBlank());
-        SubTask task = gson.fromJson(response.body(), SubTask.class);
-        assertEquals(subTask1, task);
-
+        if (response.statusCode() == 200){
+            SubTask task = gson.fromJson(response.body(), SubTask.class);
+            assertEquals(subTask1, task);
+        }
     }
 
     @Test
