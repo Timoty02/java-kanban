@@ -16,8 +16,8 @@ public class Task {
 
     protected int duration;
     protected TaskStatus status;
-    protected LocalDateTime startTime;
-    protected LocalDateTime endTime;
+    public LocalDateTime startTime;
+    public LocalDateTime endTime;
 
     public Task(String name, String description) {
         this.name = name;

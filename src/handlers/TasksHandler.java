@@ -10,7 +10,7 @@ import tasks.Task;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 
@@ -60,7 +60,7 @@ public class TasksHandler extends FuncHandler implements HttpHandler {
         try {
             Map<Integer, Task> tasks = HttpTaskServer.manager.getTasks();
             Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                    .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                     .create();
             String response = gson.toJson(tasks);
             writeResponse(exchange, response, 200);
@@ -80,7 +80,7 @@ public class TasksHandler extends FuncHandler implements HttpHandler {
             Task task = HttpTaskServer.manager.getByID(taskId);
             if (task != null) {
                 Gson gson = new GsonBuilder()
-                        .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                        .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                         .create();
                 String response = gson.toJson(task);
                 writeResponse(exchange, response, 200);
@@ -97,7 +97,7 @@ public class TasksHandler extends FuncHandler implements HttpHandler {
         try {
             String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
             Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                    .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                     .create();
             Task task = gson.fromJson(body, Task.class);
             if (task.getId() != 0) {

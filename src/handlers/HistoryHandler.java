@@ -8,7 +8,7 @@ import servers.HttpTaskServer;
 import tasks.Task;
 
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class HistoryHandler extends FuncHandler implements HttpHandler {
@@ -21,7 +21,7 @@ public class HistoryHandler extends FuncHandler implements HttpHandler {
                 List<Task> history = HttpTaskServer.manager.getHistory();
                 if (history != null && !history.isEmpty()) {
                     Gson gson = new GsonBuilder()
-                            .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                             .create();
                     writeResponse(exchange, gson.toJson(history), 200);
                 } else {

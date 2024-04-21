@@ -11,7 +11,7 @@ import tasks.SubTask;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -64,7 +64,7 @@ public class EpicsHandler extends FuncHandler implements HttpHandler {
         try {
             Map<Integer, EpicTask> epictasks = HttpTaskServer.manager.getEpicTasks();
             Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                    .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                     .create();
             String response = gson.toJson(epictasks);
             writeResponse(exchange, response, 200);
@@ -84,7 +84,7 @@ public class EpicsHandler extends FuncHandler implements HttpHandler {
             EpicTask epictask = (EpicTask) HttpTaskServer.manager.getByID(epicTaskId);
             if (epictask != null) {
                 Gson gson = new GsonBuilder()
-                        .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                        .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                         .create();
                 String response = gson.toJson(epictask);
                 writeResponse(exchange, response, 200);
@@ -101,7 +101,7 @@ public class EpicsHandler extends FuncHandler implements HttpHandler {
         try {
             String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
             Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                    .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                     .create();
             EpicTask epictask = gson.fromJson(body, EpicTask.class);
             if (epictask.getId() != 0) {
@@ -128,7 +128,7 @@ public class EpicsHandler extends FuncHandler implements HttpHandler {
             List<SubTask> subTasks = HttpTaskServer.manager.getSubsOfEpic(epicTaskId);
             if (subTasks != null) {
                 Gson gson = new GsonBuilder()
-                        .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                        .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                         .create();
                 String response = gson.toJson(subTasks);
                 writeResponse(exchange, response, 200);

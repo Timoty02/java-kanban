@@ -10,7 +10,7 @@ import tasks.SubTask;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 
@@ -60,7 +60,7 @@ public class SubtasksHandler extends FuncHandler implements HttpHandler {
         try {
             Map<Integer, SubTask> subtasks = HttpTaskServer.manager.getSubTasks();
             Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                    .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                     .create();
             String response = gson.toJson(subtasks);
             writeResponse(exchange, response, 200);
@@ -80,7 +80,7 @@ public class SubtasksHandler extends FuncHandler implements HttpHandler {
             SubTask subtask = (SubTask) HttpTaskServer.manager.getByID(subtaskId);
             if (subtask != null) {
                 Gson gson = new GsonBuilder()
-                        .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                        .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                         .create();
                 String response = gson.toJson(subtask);
                 writeResponse(exchange, response, 200);
@@ -97,7 +97,7 @@ public class SubtasksHandler extends FuncHandler implements HttpHandler {
         try {
             String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
             Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                    .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                     .create();
             SubTask subtask = gson.fromJson(body, SubTask.class);
             if (subtask.getId() != 0) {

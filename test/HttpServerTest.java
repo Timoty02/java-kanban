@@ -1,7 +1,7 @@
 package test;
 
 import com.google.gson.*;
-import handlers.LocalDateTypeAdapter;
+import handlers.LocalDateTimeTypeAdapter;
 import managers.Managers;
 import managers.TaskManager;
 import org.junit.jupiter.api.AfterEach;
@@ -21,7 +21,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -34,12 +33,12 @@ public class HttpServerTest {
     SubTask subTask1;
     EpicTask epicTask1;
     private HttpClient client;
-    Gson gson;
+    public Gson gson;
 
     @BeforeEach
     void setUp() throws IOException {
         gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                 .create();
         client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
         server = new HttpTaskServer();

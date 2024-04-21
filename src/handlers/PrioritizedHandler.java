@@ -8,7 +8,7 @@ import servers.HttpTaskServer;
 import tasks.Task;
 
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.TreeSet;
 
 public class PrioritizedHandler extends FuncHandler implements HttpHandler {
@@ -21,7 +21,7 @@ public class PrioritizedHandler extends FuncHandler implements HttpHandler {
                 TreeSet<Task> taskTreeSet = HttpTaskServer.manager.getSortedTasksByStartTime();
                 if (taskTreeSet != null && !taskTreeSet.isEmpty()) {
                     Gson gson = new GsonBuilder()
-                            .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                             .create();
                     writeResponse(exchange, gson.toJson(taskTreeSet), 200);
                 } else {
