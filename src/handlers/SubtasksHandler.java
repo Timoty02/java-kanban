@@ -47,7 +47,7 @@ public class SubtasksHandler extends FuncHandler implements HttpHandler {
                     writeResponse(exchange, "Некорректный URL", 400);
                     break;
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             writeResponse(exchange, "Произошла ошибка сервера", 500);
         }
         //HttpsubtaskServer.stop();

@@ -23,25 +23,25 @@ public class EpicsHandler extends FuncHandler implements HttpHandler {
             String[] uri = exchange.getRequestURI().getPath().split("/");
             switch (method) {
                 case "GET":
-                    if (uri.length == 2 && uri[1].equals("epictasks")) {
+                    if (uri.length == 2 && uri[1].equals("epics")) {
                         handleGetAllEpicTasks(exchange);
-                    } else if (uri.length == 3 && uri[1].equals("epictasks")) {
+                    } else if (uri.length == 3 && uri[1].equals("epics")) {
                         handleGetEpicTaskById(exchange);
-                    } else if (uri.length == 4 && uri[1].equals("epictasks") && uri[3].equals("subtasks")) {
+                    } else if (uri.length == 4 && uri[1].equals("epics") && uri[3].equals("subtasks")) {
                         handleGetSubtasksOfEpicTask(exchange);
                     } else {
                         writeResponse(exchange, "Некорректный URL", 400);
                     }
                     break;
                 case "POST":
-                    if (uri.length == 2 && uri[1].equals("epictasks")) {
+                    if (uri.length == 2 && uri[1].equals("epics")) {
                         handlePostEpicTask(exchange);
                     } else {
                         writeResponse(exchange, "Некорректный URL", 400);
                     }
                     break;
                 case "DELETE":
-                    if (uri.length == 3 && uri[1].equals("epictasks")) {
+                    if (uri.length == 3 && uri[1].equals("epics")) {
                         handleDeleteEpicTask(exchange);
                     } else {
                         writeResponse(exchange, "Некорректный URL", 400);
@@ -51,7 +51,7 @@ public class EpicsHandler extends FuncHandler implements HttpHandler {
                     writeResponse(exchange, "Некорректный URL", 400);
                     break;
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             writeResponse(exchange, "Произошла ошибка сервера", 500);
         }
         //HttpepictaskServer.stop();

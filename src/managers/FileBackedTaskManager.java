@@ -1,6 +1,7 @@
 package managers;
 
 import exceptions.ManagerSaveException;
+import exceptions.TaskException;
 import tasks.EpicTask;
 import tasks.SubTask;
 import tasks.Task;
@@ -10,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,7 +30,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public Task create(Task task) {
+    public Task create(Task task) throws TaskException {
         Task task1 = super.create(task);
         save();
         return task1;
@@ -139,9 +141,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 String line = br.readLine();
                 lines.add(line);
             }
-            lines.remove(0);
+            if (!lines.isEmpty()) {
+                lines.remove(0);
+            }
             FileBackedTaskManager manager = new FileBackedTaskManager(fileName);
             if (!lines.isEmpty()) {
+
                 int i = 0;
                 while (i != lines.size() && !lines.get(i).isBlank()) {
                     manager.create(Task.fromString(lines.get(i)));
@@ -152,8 +157,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     i++;
                     List<Integer> temps = historyFromString(lines.get(i));
                     //String[] temps = lines.get(i).split(",");
+                    Collections.reverse(temps);
                     for (Integer temp : temps) {
-                        manager.getTaskByID(temp);
+                        manager.getByID(temp);
                     }
                 } catch (IndexOutOfBoundsException ignored) {
 

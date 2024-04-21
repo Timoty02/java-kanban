@@ -15,9 +15,9 @@ public class PrioritizedHandler extends FuncHandler implements HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
         try {
             String method = exchange.getRequestMethod();
-            if (method.equals("GET")){
+            if (method.equals("GET")) {
                 TreeSet<Task> taskTreeSet = HttpTaskServer.manager.getSortedTasksByStartTime();
-                if (taskTreeSet!=null && !taskTreeSet.isEmpty()){
+                if (taskTreeSet != null && !taskTreeSet.isEmpty()) {
                     Gson gson = new Gson();
                     writeResponse(exchange, gson.toJson(taskTreeSet), 200);
                 } else {
@@ -26,8 +26,8 @@ public class PrioritizedHandler extends FuncHandler implements HttpHandler {
             } else {
                 writeResponse(exchange, "Некорректный запрос", 400);
             }
-        } catch (Exception e){
-            writeResponse(exchange,"Произошла ошибка сервера", 500);
+        } catch (Exception e) {
+            writeResponse(exchange, "Произошла ошибка сервера", 500);
         }
 
     }

@@ -12,6 +12,7 @@ public class Task {
     protected String name;
     protected String description;
     protected int id;
+    //protected int epicId = 0;
 
     protected int duration;
     protected TaskStatus status;
@@ -73,6 +74,10 @@ public class Task {
         type = TaskType.TASK;
     }
 
+    public Task() {
+
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -105,7 +110,7 @@ public class Task {
                 task = new Task(values[2], values[4]);
                 break;
             case "EPIC":
-                task = new EpicTask(values[2], values[4], LocalDateTime.parse(values[7], Format));
+                task = new EpicTask(values[2], values[4]);
                 break;
             case "SUBTASK":
                 task = new SubTask(values[2], values[4]);
@@ -208,4 +213,6 @@ public class Task {
     public void setDescription(String description) {
         this.description = description;
     }
+
+
 }

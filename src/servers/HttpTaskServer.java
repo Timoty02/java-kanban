@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class HttpTaskServer {
     public static TaskManager manager;
     private static final int PORT = 8080;
-    private static HttpServer httpServer;
+    private final HttpServer httpServer;
 
     public HttpTaskServer() throws IOException {
         manager = Managers.getDefault();
@@ -30,18 +30,18 @@ public class HttpTaskServer {
         System.out.println("Чтобы остановить напечайте s");
         Scanner scanner = new Scanner(System.in);
         String code = scanner.next();
-        while (!code.equals("s")){
+        while (!code.equals("s")) {
             System.out.println("Чтобы остановить напечайте s");
             code = scanner.next();
         }
-        stop();
+        server.stop();
     }
 
-    public static void stop() {
-        httpServer.stop(10);
+    public void stop() {
+        httpServer.stop(0);
     }
 
-    public void start() throws IOException{
+    public void start() {
         httpServer.start();
         System.out.println("HTTP-сервер запущен на " + PORT + " порту!");
     }

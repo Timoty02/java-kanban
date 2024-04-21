@@ -15,9 +15,9 @@ public class HistoryHandler extends FuncHandler implements HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
         try {
             String method = exchange.getRequestMethod();
-            if (method.equals("GET")){
+            if (method.equals("GET")) {
                 List<Task> history = HttpTaskServer.manager.getHistory();
-                if (history!=null && !history.isEmpty()){
+                if (history != null && !history.isEmpty()) {
                     Gson gson = new Gson();
                     writeResponse(exchange, gson.toJson(history), 200);
                 } else {
@@ -26,8 +26,8 @@ public class HistoryHandler extends FuncHandler implements HttpHandler {
             } else {
                 writeResponse(exchange, "Некорректный запрос", 400);
             }
-        } catch (Exception e){
-            writeResponse(exchange,"Произошла ошибка сервера", 500);
+        } catch (Exception e) {
+            writeResponse(exchange, "Произошла ошибка сервера", 500);
         }
 
     }

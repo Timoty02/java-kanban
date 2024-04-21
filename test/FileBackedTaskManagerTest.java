@@ -73,17 +73,6 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
 
     }
 
-    @Test
-    void saveSeveralTasks() {
-        taskManager.create(subTask1);
-        taskManager.create(epicTask1);
-        taskManager.create(task1);
-        taskManager.getByID(1);
-        taskManager.getByID(2);
-        taskManager.getByID(3);
-        Task task2 = taskManager.getByID(1);
-        System.out.println(task2);
-    }
 
     //метод сравнения файлов взятый из интернета
     private static long filesCompareByByte(Path path1, Path path2) throws IOException {
