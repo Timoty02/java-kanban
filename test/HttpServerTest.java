@@ -1,6 +1,7 @@
 package test;
 
 import com.google.gson.*;
+import handlers.LocalDateTypeAdapter;
 import managers.Managers;
 import managers.TaskManager;
 import org.junit.jupiter.api.AfterEach;
