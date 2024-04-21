@@ -1,14 +1,17 @@
 package handlers;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import exceptions.TaskException;
 import servers.HttpTaskServer;
 import tasks.SubTask;
+import test.LocalDateTypeAdapter;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
 
@@ -57,7 +60,9 @@ public class SubtasksHandler extends FuncHandler implements HttpHandler {
     public void handleGetAllSubTasks(HttpExchange exchange) throws IOException {
         try {
             Map<Integer, SubTask> subtasks = HttpTaskServer.manager.getSubTasks();
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                    .create();
             String response = gson.toJson(subtasks);
             writeResponse(exchange, response, 200);
         } catch (Exception e) {
@@ -75,7 +80,9 @@ public class SubtasksHandler extends FuncHandler implements HttpHandler {
             int subtaskId = subtaskIdOpt.get();
             SubTask subtask = (SubTask) HttpTaskServer.manager.getByID(subtaskId);
             if (subtask != null) {
-                Gson gson = new Gson();
+                Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                        .create();
                 String response = gson.toJson(subtask);
                 writeResponse(exchange, response, 200);
             } else {
@@ -90,7 +97,9 @@ public class SubtasksHandler extends FuncHandler implements HttpHandler {
     public void handlePostSubTask(HttpExchange exchange) throws IOException {
         try {
             String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                    .create();
             SubTask subtask = gson.fromJson(body, SubTask.class);
             if (subtask.getId() != 0) {
                 HttpTaskServer.manager.update(subtask);

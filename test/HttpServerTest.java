@@ -20,6 +20,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -36,7 +37,9 @@ public class HttpServerTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                .create();
         client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
         server = new HttpTaskServer();
         server.start();

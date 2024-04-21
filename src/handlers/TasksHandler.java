@@ -1,14 +1,17 @@
 package handlers;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import exceptions.TaskException;
 import servers.HttpTaskServer;
 import tasks.Task;
+import test.LocalDateTypeAdapter;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
 
@@ -57,7 +60,9 @@ public class TasksHandler extends FuncHandler implements HttpHandler {
     public void handleGetAllTasks(HttpExchange exchange) throws IOException {
         try {
             Map<Integer, Task> tasks = HttpTaskServer.manager.getTasks();
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                    .create();
             String response = gson.toJson(tasks);
             writeResponse(exchange, response, 200);
         } catch (Exception e) {
@@ -75,7 +80,9 @@ public class TasksHandler extends FuncHandler implements HttpHandler {
             int taskId = taskIdOpt.get();
             Task task = HttpTaskServer.manager.getByID(taskId);
             if (task != null) {
-                Gson gson = new Gson();
+                Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                        .create();
                 String response = gson.toJson(task);
                 writeResponse(exchange, response, 200);
             } else {
@@ -90,7 +97,9 @@ public class TasksHandler extends FuncHandler implements HttpHandler {
     public void handlePostTask(HttpExchange exchange) throws IOException {
         try {
             String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                    .create();
             Task task = gson.fromJson(body, Task.class);
             if (task.getId() != 0) {
                 HttpTaskServer.manager.update(task);
