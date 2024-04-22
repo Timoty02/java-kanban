@@ -21,25 +21,26 @@ public class TasksHandler extends FuncHandler implements HttpHandler {
         try {
             String method = exchange.getRequestMethod();
             String[] uri = exchange.getRequestURI().getPath().split("/");
+            String page = "tasks";
             switch (method) {
                 case "GET":
-                    if (uri.length == 2 && uri[1].equals("tasks")) {
+                    if (uri.length == 2 && uri[1].equals(page)) {
                         handleGetAllTasks(exchange);
-                    } else if (uri.length == 3 && uri[1].equals("tasks")) {
+                    } else if (uri.length == 3 && uri[1].equals(page)) {
                         handleGetTaskById(exchange);
                     } else {
                         writeResponse(exchange, "Некорректный URL", 400);
                     }
                     break;
                 case "POST":
-                    if (uri.length == 2 && uri[1].equals("tasks")) {
+                    if (uri.length == 2 && uri[1].equals(page)) {
                         handlePostTask(exchange);
                     } else {
                         writeResponse(exchange, "Некорректный URL", 400);
                     }
                     break;
                 case "DELETE":
-                    if (uri.length == 3 && uri[1].equals("tasks")) {
+                    if (uri.length == 3 && uri[1].equals(page)) {
                         handleDeleteTask(exchange);
                     } else {
                         writeResponse(exchange, "Некорректный URL", 400);

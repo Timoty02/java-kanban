@@ -23,27 +23,28 @@ public class EpicsHandler extends FuncHandler implements HttpHandler {
         try {
             String method = exchange.getRequestMethod();
             String[] uri = exchange.getRequestURI().getPath().split("/");
+            String page = "epics";
             switch (method) {
                 case "GET":
-                    if (uri.length == 2 && uri[1].equals("epics")) {
+                    if (uri.length == 2 && uri[1].equals(page)) {
                         handleGetAllEpicTasks(exchange);
-                    } else if (uri.length == 3 && uri[1].equals("epics")) {
+                    } else if (uri.length == 3 && uri[1].equals(page)) {
                         handleGetEpicTaskById(exchange);
-                    } else if (uri.length == 4 && uri[1].equals("epics") && uri[3].equals("subtasks")) {
+                    } else if (uri.length == 4 && uri[1].equals(page) && uri[3].equals("subtasks")) {
                         handleGetSubtasksOfEpicTask(exchange);
                     } else {
                         writeResponse(exchange, "Некорректный URL", 400);
                     }
                     break;
                 case "POST":
-                    if (uri.length == 2 && uri[1].equals("epics")) {
+                    if (uri.length == 2 && uri[1].equals(page)) {
                         handlePostEpicTask(exchange);
                     } else {
                         writeResponse(exchange, "Некорректный URL", 400);
                     }
                     break;
                 case "DELETE":
-                    if (uri.length == 3 && uri[1].equals("epics")) {
+                    if (uri.length == 3 && uri[1].equals(page)) {
                         handleDeleteEpicTask(exchange);
                     } else {
                         writeResponse(exchange, "Некорректный URL", 400);

@@ -21,25 +21,26 @@ public class SubtasksHandler extends FuncHandler implements HttpHandler {
         try {
             String method = exchange.getRequestMethod();
             String[] uri = exchange.getRequestURI().getPath().split("/");
+            String page = "subtasks";
             switch (method) {
                 case "GET":
-                    if (uri.length == 2 && uri[1].equals("subtasks")) {
+                    if (uri.length == 2 && uri[1].equals(page)) {
                         handleGetAllSubTasks(exchange);
-                    } else if (uri.length == 3 && uri[1].equals("subtasks")) {
+                    } else if (uri.length == 3 && uri[1].equals(page)) {
                         handleGetSubTaskById(exchange);
                     } else {
                         writeResponse(exchange, "Некорректный URL", 400);
                     }
                     break;
                 case "POST":
-                    if (uri.length == 2 && uri[1].equals("subtasks")) {
+                    if (uri.length == 2 && uri[1].equals(page)) {
                         handlePostSubTask(exchange);
                     } else {
                         writeResponse(exchange, "Некорректный URL", 400);
                     }
                     break;
                 case "DELETE":
-                    if (uri.length == 3 && uri[1].equals("subtasks")) {
+                    if (uri.length == 3 && uri[1].equals(page)) {
                         handleDeleteSubTask(exchange);
                     } else {
                         writeResponse(exchange, "Некорректный URL", 400);
