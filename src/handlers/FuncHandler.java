@@ -10,6 +10,14 @@ import java.util.Optional;
 
 abstract class FuncHandler {
     protected static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
+    protected static final String WrongUrl = "Некорректный URL";
+    protected static final String ServerErr = "Произошла ошибка сервера";
+    protected static final String WrongId = "Некорректный идентификатор задачи";
+    protected static final String IdNotFound = "Задача с данным id не найдена";
+    protected static final String Added = "Задача успешно добавлена";
+    protected static final String ManagerErr = "Добавляемая задача пересекается с текущими";
+    protected static final String WrongRequest = "Некорректный запрос";
+    protected static final String Deleted = "Задача успешно удалена";
 
     protected void writeResponse(HttpExchange exchange, String responseString, int responseCode) throws IOException {
         try (OutputStream os = exchange.getResponseBody()) {

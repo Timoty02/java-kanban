@@ -28,10 +28,10 @@ public class HistoryHandler extends FuncHandler implements HttpHandler {
                     writeResponse(exchange, "", 200);
                 }
             } else {
-                writeResponse(exchange, "Некорректный запрос", 400);
+                writeResponse(exchange, WrongRequest, 400);
             }
         } catch (Exception e) {
-            writeResponse(exchange, "Произошла ошибка сервера", 500);
+            writeResponse(exchange, ServerErr, 500);
         }
 
     }

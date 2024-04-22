@@ -33,29 +33,29 @@ public class EpicsHandler extends FuncHandler implements HttpHandler {
                     } else if (uri.length == 4 && uri[1].equals(page) && uri[3].equals("subtasks")) {
                         handleGetSubtasksOfEpicTask(exchange);
                     } else {
-                        writeResponse(exchange, "Некорректный URL", 400);
+                        writeResponse(exchange, WrongUrl, 400);
                     }
                     break;
                 case "POST":
                     if (uri.length == 2 && uri[1].equals(page)) {
                         handlePostEpicTask(exchange);
                     } else {
-                        writeResponse(exchange, "Некорректный URL", 400);
+                        writeResponse(exchange, WrongUrl, 400);
                     }
                     break;
                 case "DELETE":
                     if (uri.length == 3 && uri[1].equals(page)) {
                         handleDeleteEpicTask(exchange);
                     } else {
-                        writeResponse(exchange, "Некорректный URL", 400);
+                        writeResponse(exchange, WrongUrl, 400);
                     }
                     break;
                 default:
-                    writeResponse(exchange, "Некорректный URL", 400);
+                    writeResponse(exchange, WrongUrl, 400);
                     break;
             }
         } catch (Exception e) {
-            writeResponse(exchange, "Произошла ошибка сервера", 500);
+            writeResponse(exchange, ServerErr, 500);
         }
     }
 
@@ -69,7 +69,7 @@ public class EpicsHandler extends FuncHandler implements HttpHandler {
             String response = gson.toJson(epictasks);
             writeResponse(exchange, response, 200);
         } catch (Exception e) {
-            writeResponse(exchange, "Произошла ошибка сервера", 500);
+            writeResponse(exchange, ServerErr, 500);
         }
     }
 
@@ -77,7 +77,7 @@ public class EpicsHandler extends FuncHandler implements HttpHandler {
         try {
             Optional<Integer> epicTaskIdOpt = getTaskId(exchange);
             if (epicTaskIdOpt.isEmpty()) {
-                writeResponse(exchange, "Некорректный идентификатор задачи", 400);
+                writeResponse(exchange, WrongId, 400);
                 return;
             }
             int epicTaskId = epicTaskIdOpt.get();
@@ -89,10 +89,10 @@ public class EpicsHandler extends FuncHandler implements HttpHandler {
                 String response = gson.toJson(epictask);
                 writeResponse(exchange, response, 200);
             } else {
-                writeResponse(exchange, "Задача с данным id не найдена", 404);
+                writeResponse(exchange, IdNotFound, 404);
             }
         } catch (Exception e) {
-            writeResponse(exchange, "Произошла ошибка сервера", 500);
+            writeResponse(exchange, ServerErr, 500);
         }
 
     }
@@ -109,11 +109,11 @@ public class EpicsHandler extends FuncHandler implements HttpHandler {
             } else {
                 HttpTaskServer.manager.create(epictask);
             }
-            writeResponse(exchange, "Задача успешно добавлена", 201);
+            writeResponse(exchange, Added, 201);
         } catch (TaskException e) {
-            writeResponse(exchange, "Добавляемая задача пересекается с текущими", 406);
+            writeResponse(exchange, ManagerErr, 406);
         } catch (Exception e) {
-            writeResponse(exchange, "Произошла ошибка сервера", 500);
+            writeResponse(exchange, ServerErr, 500);
         }
     }
 
@@ -121,7 +121,7 @@ public class EpicsHandler extends FuncHandler implements HttpHandler {
         try {
             Optional<Integer> epicTaskIdOpt = getTaskId(exchange);
             if (epicTaskIdOpt.isEmpty()) {
-                writeResponse(exchange, "Некорректный идентификатор задачи", 400);
+                writeResponse(exchange, WrongId, 400);
                 return;
             }
             int epicTaskId = epicTaskIdOpt.get();
@@ -133,10 +133,10 @@ public class EpicsHandler extends FuncHandler implements HttpHandler {
                 String response = gson.toJson(subTasks);
                 writeResponse(exchange, response, 200);
             } else {
-                writeResponse(exchange, "Задача с данным id не найдена", 404);
+                writeResponse(exchange, IdNotFound, 404);
             }
         } catch (Exception e) {
-            writeResponse(exchange, "Произошла ошибка сервера", 500);
+            writeResponse(exchange, ServerErr, 500);
         }
     }
 
@@ -144,14 +144,14 @@ public class EpicsHandler extends FuncHandler implements HttpHandler {
         try {
             Optional<Integer> epicTaskIdOpt = getTaskId(exchange);
             if (epicTaskIdOpt.isEmpty()) {
-                writeResponse(exchange, "Некорректный идентификатор задачи", 400);
+                writeResponse(exchange, WrongId, 400);
                 return;
             }
             int epicTaskId = epicTaskIdOpt.get();
             HttpTaskServer.manager.deleteById(epicTaskId);
-            writeResponse(exchange, "Задача успешно удалена", 201);
+            writeResponse(exchange, Deleted, 201);
         } catch (Exception e) {
-            writeResponse(exchange, "Произошла ошибка сервера", 500);
+            writeResponse(exchange, ServerErr, 500);
         }
     }
 }

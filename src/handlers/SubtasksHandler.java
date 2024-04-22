@@ -29,29 +29,29 @@ public class SubtasksHandler extends FuncHandler implements HttpHandler {
                     } else if (uri.length == 3 && uri[1].equals(page)) {
                         handleGetSubTaskById(exchange);
                     } else {
-                        writeResponse(exchange, "Некорректный URL", 400);
+                        writeResponse(exchange, WrongUrl, 400);
                     }
                     break;
                 case "POST":
                     if (uri.length == 2 && uri[1].equals(page)) {
                         handlePostSubTask(exchange);
                     } else {
-                        writeResponse(exchange, "Некорректный URL", 400);
+                        writeResponse(exchange, WrongUrl, 400);
                     }
                     break;
                 case "DELETE":
                     if (uri.length == 3 && uri[1].equals(page)) {
                         handleDeleteSubTask(exchange);
                     } else {
-                        writeResponse(exchange, "Некорректный URL", 400);
+                        writeResponse(exchange, WrongUrl, 400);
                     }
                     break;
                 default:
-                    writeResponse(exchange, "Некорректный URL", 400);
+                    writeResponse(exchange, WrongUrl, 400);
                     break;
             }
         } catch (Exception e) {
-            writeResponse(exchange, "Произошла ошибка сервера", 500);
+            writeResponse(exchange, ServerErr, 500);
         }
     }
 
@@ -65,7 +65,7 @@ public class SubtasksHandler extends FuncHandler implements HttpHandler {
             String response = gson.toJson(subtasks);
             writeResponse(exchange, response, 200);
         } catch (Exception e) {
-            writeResponse(exchange, "Произошла ошибка сервера", 500);
+            writeResponse(exchange, ServerErr, 500);
         }
     }
 
@@ -73,7 +73,7 @@ public class SubtasksHandler extends FuncHandler implements HttpHandler {
         try {
             Optional<Integer> subtaskIdOpt = getTaskId(exchange);
             if (subtaskIdOpt.isEmpty()) {
-                writeResponse(exchange, "Некорректный идентификатор задачи", 400);
+                writeResponse(exchange, WrongId, 400);
                 return;
             }
             int subtaskId = subtaskIdOpt.get();
@@ -85,10 +85,10 @@ public class SubtasksHandler extends FuncHandler implements HttpHandler {
                 String response = gson.toJson(subtask);
                 writeResponse(exchange, response, 200);
             } else {
-                writeResponse(exchange, "Задача с данным id не найдена", 404);
+                writeResponse(exchange, IdNotFound, 404);
             }
         } catch (Exception e) {
-            writeResponse(exchange, "Произошла ошибка сервера", 500);
+            writeResponse(exchange, ServerErr, 500);
         }
 
     }
@@ -105,11 +105,11 @@ public class SubtasksHandler extends FuncHandler implements HttpHandler {
             } else {
                 HttpTaskServer.manager.create(subtask);
             }
-            writeResponse(exchange, "Задача успешно добавлена", 201);
+            writeResponse(exchange, Added, 201);
         } catch (TaskException e) {
-            writeResponse(exchange, "Добавляемая задача пересекается с текущими", 406);
+            writeResponse(exchange, ManagerErr, 406);
         } catch (Exception e) {
-            writeResponse(exchange, "Произошла ошибка сервера", 500);
+            writeResponse(exchange, ServerErr, 500);
         }
     }
 
@@ -117,14 +117,14 @@ public class SubtasksHandler extends FuncHandler implements HttpHandler {
         try {
             Optional<Integer> subtaskIdOpt = getTaskId(exchange);
             if (subtaskIdOpt.isEmpty()) {
-                writeResponse(exchange, "Некорректный идентификатор задачи", 400);
+                writeResponse(exchange, WrongId, 400);
                 return;
             }
             int subtaskId = subtaskIdOpt.get();
             HttpTaskServer.manager.deleteById(subtaskId);
-            writeResponse(exchange, "Задача успешно удалена", 201);
+            writeResponse(exchange, Deleted, 201);
         } catch (Exception e) {
-            writeResponse(exchange, "Произошла ошибка сервера", 500);
+            writeResponse(exchange, ServerErr, 500);
         }
     }
 }
