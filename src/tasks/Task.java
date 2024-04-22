@@ -12,7 +12,6 @@ public class Task {
     protected String name;
     protected String description;
     protected int id;
-    //protected int epicId = 0;
 
     protected int duration;
     protected TaskStatus status;

@@ -153,7 +153,7 @@ public class HttpServerTest {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         System.out.println(response.body());
         assertFalse(response.body().isBlank());
-        if (response.statusCode() == 200){
+        if (response.statusCode() == 200) {
             SubTask task = gson.fromJson(response.body(), SubTask.class);
             assertEquals(subTask1, task);
         }

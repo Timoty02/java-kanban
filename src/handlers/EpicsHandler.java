@@ -56,7 +56,6 @@ public class EpicsHandler extends FuncHandler implements HttpHandler {
         } catch (Exception e) {
             writeResponse(exchange, "Произошла ошибка сервера", 500);
         }
-        //HttpepictaskServer.stop();
     }
 
 

@@ -52,7 +52,6 @@ public class TasksHandler extends FuncHandler implements HttpHandler {
         } catch (Exception e) {
             writeResponse(exchange, "Произошла ошибка сервера", 500);
         }
-        //HttpTaskServer.stop();
     }
 
 

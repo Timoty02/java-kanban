@@ -45,15 +45,6 @@ public class EpicTask extends Task {
         this.endTime = endTime;
     }
 
-    /*public static EpicTask copyOf(EpicTask task) {
-        if (task != null) {
-            return new EpicTask(task.getName(), task.getDescription(), task.getId(), task.getDuration(), task.getStatus(),
-                    task.getStartTime(), task.getEndTime(), task.getSubIds());
-        } else {
-            return null;
-        }
-    }*/
-
 
     public void addSubId(int id) {
         subIds.add(id);

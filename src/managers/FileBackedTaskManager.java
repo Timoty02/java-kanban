@@ -156,7 +156,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 try {
                     i++;
                     List<Integer> temps = historyFromString(lines.get(i));
-                    //String[] temps = lines.get(i).split(",");
                     Collections.reverse(temps);
                     for (Integer temp : temps) {
                         manager.getByID(temp);
@@ -186,23 +185,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         temp.add(task.toString() + "\n");
                     }
                 }
-                /*if (!tasks.isEmpty()) {
-                    for (Task task : tasks.values()) {
-                        temp.add(task.toString() + "\n");
-                    }
-                }
-
-                if (!epicTasks.isEmpty()) {
-                    for (EpicTask task : epicTasks.values()) {
-                        temp.add(task.toString() + "\n");
-                    }
-                }
-
-                if (!subTasks.isEmpty()) {
-                    for (SubTask task : subTasks.values()) {
-                        temp.add(task.toString() + "\n");
-                    }
-                }*/
 
                 if (!historyManager.getHistory().isEmpty()) {
                     temp.add("\n");

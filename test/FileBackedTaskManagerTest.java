@@ -83,7 +83,6 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
     }
 
 
-    //метод сравнения файлов взятый из интернета
     private static long filesCompareByByte(Path path1, Path path2) throws IOException {
         try (BufferedInputStream fis1 = new BufferedInputStream(new FileInputStream(path1.toFile()));
              BufferedInputStream fis2 = new BufferedInputStream(new FileInputStream(path2.toFile()))) {
