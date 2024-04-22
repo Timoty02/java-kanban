@@ -41,11 +41,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
             for (Integer i : tasks.keySet()) {
                 remove(tasks.get(i).getId());
-                /*if (!tasks.get(i).getSubIds().isEmpty()){
-                    for (int j:tasks.get(i).getSubIds()) {
-                        remove(j);
-                    }
-                }*/
+
             }
         }
     }
@@ -108,7 +104,6 @@ public class InMemoryHistoryManager implements HistoryManager {
     private List<Task> getTasks() {
         List<Task> historyTaskList = new ArrayList<>();
         Node<Task> nTask = tail;
-        //if (nTask == null && head == null) {
         if (nTask == null && head != null) {
             historyTaskList.add(head.getData());
         } else {

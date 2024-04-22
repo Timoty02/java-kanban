@@ -2,7 +2,7 @@ package managers;
 
 public class Managers {
     public static TaskManager getDefault() {
-        return new FileBackedTaskManager();
+        return FileBackedTaskManager.loadFromFile("manager.csv");
     }
 
     public static HistoryManager getDefaultHistory() {

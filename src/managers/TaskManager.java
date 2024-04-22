@@ -31,7 +31,7 @@ public interface TaskManager {
 
     void deleteAllTasks();
 
-    public Task getByID(int id);
+    Task getByID(int id);
 
     Task deleteById(int id);
 

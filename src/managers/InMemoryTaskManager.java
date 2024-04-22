@@ -49,26 +49,23 @@ public class InMemoryTaskManager implements TaskManager {
         historyManager = Managers.getDefaultHistory();
     }
 
-    public Task create(Task task) {
-        try {
-            switch (task.getType()) {
-                case TASK:
-                    return createTask(task);
-                case EPIC:
-                    return createEpic((EpicTask) task);
-                case SUBTASK:
-                    return createSubTask((SubTask) task);
-                default:
-                    throw new TaskException("Неподдерживаемый тип задачи");
-            }
-        } catch (TaskException e) {
-            System.out.println(e.getMessage());
-            return null;
+    public Task create(Task task) throws TaskException {
+
+        switch (task.getType()) {
+            case TASK:
+                return createTask(task);
+            case EPIC:
+                return createEpic((EpicTask) task);
+            case SUBTASK:
+                return createSubTask((SubTask) task);
+            default:
+                throw new TaskException("Неподдерживаемый тип задачи");
         }
+
 
     }
 
-    protected Task createTask(Task task) {
+    protected Task createTask(Task task) throws TaskException {
         task.setId(nextId);
         try {
             addToSorted(task);
@@ -76,7 +73,7 @@ public class InMemoryTaskManager implements TaskManager {
         } catch (TaskException e) {
             System.out.println(e.getMessage());
             task.setId(0);
-            return task;
+            throw new TaskException(e.getMessage());
         }
         nextId++;
         tasks.put(task.getId(), task);
@@ -109,9 +106,9 @@ public class InMemoryTaskManager implements TaskManager {
                 SubTask subTask = subTasks.get(id);
                 subTask.setEpicId(task.getId());
                 updateSubTask(subTask);
+                epicUpdater(task);
             }
         }
-        epicUpdater(task);
         return task;
 
     }
